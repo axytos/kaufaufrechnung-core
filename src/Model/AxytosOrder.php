@@ -1,0 +1,85 @@
+<?php
+
+namespace Axytos\KaufAufRechnung\Core\Model;
+
+use Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderInterface;
+use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine;
+
+class AxytosOrder implements AxytosOrderInterface
+{
+    /**
+     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderEventEmitter
+     */
+    private $eventEmitter;
+
+    /**
+     * @var \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine
+     */
+    private $stateMachine;
+
+    public function __construct(
+        AxytosOrderEventEmitter $eventEmitter,
+        OrderStateMachine $stateMachine
+    ) {
+        $this->eventEmitter = $eventEmitter;
+        $this->stateMachine = $stateMachine;
+    }
+
+    /**
+     * @param string $eventName
+     * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     * @param callable $eventListener
+     * @return void
+     */
+    public function subscribeEventListener($eventName, $eventListener)
+    {
+        $this->eventEmitter->subscribe($eventName, $eventListener);
+    }
+
+    /**
+     * @return string
+     * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*
+     */
+    public function getOrderCheckoutAction()
+    {
+        $checkoutAction = $this->stateMachine->getCheckoutAction();
+        if ($checkoutAction === null) {
+            throw new \Exception("No checkout action defined for current order state");
+        }
+
+        return $checkoutAction;
+    }
+
+    /**
+     * @return void
+     */
+    public function checkout()
+    {
+        $this->stateMachine->checkout();
+    }
+
+    /**
+     * @return void
+     */
+    public function sync()
+    {
+        $this->stateMachine->syncCriticalChanges();
+        $this->stateMachine->syncUncriticalChanges();
+    }
+
+    /**
+     * @return void
+     */
+    public function syncPaymentStatus()
+    {
+        $this->stateMachine->syncPaymentStatus();
+    }
+
+    /**
+     * @return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateInterface
+     */
+    public function getCurrentState()
+    {
+        return $this->stateMachine->getCurrentState();
+    }
+}
