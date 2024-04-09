@@ -25,6 +25,7 @@ abstract class AbstractActionResult implements ActionResultInterface
     /**
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [

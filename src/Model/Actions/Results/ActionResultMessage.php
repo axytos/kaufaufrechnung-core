@@ -45,6 +45,7 @@ class ActionResultMessage implements ActionResultMessageInterface
     /**
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [
