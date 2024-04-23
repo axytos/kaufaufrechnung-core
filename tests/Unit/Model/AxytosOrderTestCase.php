@@ -12,6 +12,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterfa
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,6 +57,7 @@ class AxytosOrderTestCase extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->invoiceClient = $this->createMock(InvoiceClientInterface::class);

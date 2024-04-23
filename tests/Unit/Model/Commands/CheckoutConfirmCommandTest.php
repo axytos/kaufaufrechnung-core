@@ -7,6 +7,7 @@ use Axytos\KaufAufRechnung\Core\Model\Commands\CheckoutConfirmCommand;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CheckoutInformationInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +32,7 @@ class CheckoutConfirmCommandTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->pluginOrder = $this->createMock(PluginOrderInterface::class);

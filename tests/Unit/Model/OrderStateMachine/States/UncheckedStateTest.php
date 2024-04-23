@@ -9,6 +9,7 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateContextInterfa
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\UncheckedState;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +40,7 @@ class UncheckedStateTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->context = $this->createMock(OrderStateContextInterface::class);

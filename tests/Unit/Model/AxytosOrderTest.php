@@ -11,6 +11,8 @@ use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +37,7 @@ class AxytosOrderTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->errorReportingClient = $this->createMock(ErrorReportingClientInterface::class);
@@ -57,6 +60,7 @@ class AxytosOrderTest extends TestCase
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::* $expected
      * @return void
      */
+    #[DataProvider('getOrderCheckoutAction_test_cases')]
     public function test_getOrderCheckoutAction($orderState, $expected)
     {
 
@@ -73,7 +77,7 @@ class AxytosOrderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function getOrderCheckoutAction_test_cases()
+    public static function getOrderCheckoutAction_test_cases()
     {
         return [
             ['' /*unchecked*/, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD],
@@ -89,6 +93,7 @@ class AxytosOrderTest extends TestCase
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $orderState
      * @return void
      */
+    #[DataProvider('getOrderCheckoutAction_error_cases')]
     public function test_getOrderCheckoutAction_throwsForUnsupportedStates($orderState)
     {
         $this->pluginOrder
@@ -104,7 +109,7 @@ class AxytosOrderTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function getOrderCheckoutAction_error_cases()
+    public static function getOrderCheckoutAction_error_cases()
     {
         return [
             [OrderStates::INVOICED],

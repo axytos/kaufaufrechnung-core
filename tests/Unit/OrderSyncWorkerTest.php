@@ -9,6 +9,7 @@ use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use AxytosKaufAufRechnungShopware5\Adapter\PluginOrder;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +34,7 @@ class OrderSyncWorkerTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->orderSyncRepository = $this->createMock(OrderSyncRepositoryInterface::class);

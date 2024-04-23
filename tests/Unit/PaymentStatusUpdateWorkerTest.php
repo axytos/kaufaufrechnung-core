@@ -12,8 +12,9 @@ use Axytos\KaufAufRechnung\Core\PaymentStatusUpdateWorker;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use PHPUnit\Framework\TestCase;
 
 class PaymentStatusUpdateWorkerTest extends TestCase
@@ -47,6 +48,7 @@ class PaymentStatusUpdateWorkerTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->orderSyncRepository = $this->createMock(OrderSyncRepositoryInterface::class);
@@ -67,9 +69,10 @@ class PaymentStatusUpdateWorkerTest extends TestCase
      * @dataProvider updatePaymentStatus_test_cases
      * @param string $paymentStatus
      * @param bool $orderExists
-     * @param InvocationOrder $expectedInvocations
+     * @param int $expectedInvocations
      * @return void
      */
+    #[DataProvider('updatePaymentStatus_test_cases')]
     public function test_updatePaymentStatus_updatesOrderStatusForPaymentStatus($paymentStatus, $orderExists, $expectedInvocations)
     {
         $testPaymentId = 'payment-id';
@@ -106,7 +109,7 @@ class PaymentStatusUpdateWorkerTest extends TestCase
         }
 
         $axytosOrder
-            ->expects($expectedInvocations)
+            ->expects($this->exactly($expectedInvocations))
             ->method('syncPaymentStatus');
 
         $this->sut->updatePaymentStatus($testPaymentId);
@@ -133,17 +136,17 @@ class PaymentStatusUpdateWorkerTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function updatePaymentStatus_test_cases()
+    public static function updatePaymentStatus_test_cases()
     {
         return [
-            [PaymentStatus::UNPAID, false, $this->never()],
-            [PaymentStatus::UNPAID, true, $this->once()],
-            [PaymentStatus::PARTIALLY_PAID, false, $this->never()],
-            [PaymentStatus::PARTIALLY_PAID, true, $this->once()],
-            [PaymentStatus::PAID, false, $this->never()],
-            [PaymentStatus::PAID, true, $this->once()],
-            [PaymentStatus::OVERPAID, false, $this->never()],
-            [PaymentStatus::OVERPAID, true, $this->once()],
+            [PaymentStatus::UNPAID, false, 0],
+            [PaymentStatus::UNPAID, true, 1],
+            [PaymentStatus::PARTIALLY_PAID, false, 0],
+            [PaymentStatus::PARTIALLY_PAID, true, 1],
+            [PaymentStatus::PAID, false, 0],
+            [PaymentStatus::PAID, true, 1],
+            [PaymentStatus::OVERPAID, false, 0],
+            [PaymentStatus::OVERPAID, true, 1],
         ];
     }
 }

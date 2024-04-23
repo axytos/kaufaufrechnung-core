@@ -9,6 +9,7 @@ use Axytos\KaufAufRechnung\Core\Model\Actions\Results\SuccessResult;
 use Axytos\KaufAufRechnung\Core\Model\Actions\Results\UnknownActionResult;
 use Axytos\KaufAufRechnung\Core\OrderSyncWorker;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Configuration\ClientSecretProviderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +34,7 @@ class ActionExecutorTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->clientSecretProvider = $this->createMock(ClientSecretProviderInterface::class);

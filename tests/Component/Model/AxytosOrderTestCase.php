@@ -13,8 +13,8 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransaction
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use PHPUnit\Framework\TestCase;
 
 abstract class AxytosOrderTestCase extends TestCase
@@ -63,6 +63,7 @@ abstract class AxytosOrderTestCase extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -121,15 +122,15 @@ abstract class AxytosOrderTestCase extends TestCase
     /**
      * @param string $eventName
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
-     * @param InvocationOrder|null $times
+     * @param int|null $expectedEmitCount
      * @return void
      */
-    protected function expectEventEmitted($eventName, $times = null)
+    protected function expectEventEmitted($eventName, $expectedEmitCount = null)
     {
         /** @var MockObject */
         $callbackMock = $this->createMock(AxytosOrderCommandInterface::class);
         $callbackMock
-            ->expects($times !== null ? $times : $this->once())
+            ->expects($expectedEmitCount !== null ? $this->exactly($expectedEmitCount) : $this->once())
             ->method('execute');
 
         /** @phpstan-ignore-next-line */
