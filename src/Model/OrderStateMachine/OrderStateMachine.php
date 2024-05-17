@@ -199,7 +199,7 @@ class OrderStateMachine
      */
     public function getStateValue($name)
     {
-        return $this->stateData[$name];
+        return isset($this->stateData[$name]) ? $this->stateData[$name] : null;
     }
 
     /**
@@ -238,8 +238,8 @@ class OrderStateMachine
         if ($stateInfo !== null) {
             $this->state = $this->createState($stateInfo->getName());
             $stateData = $stateInfo->getData();
-            /** @phpstan-ignore-next-line */
-            $this->stateData = $stateData !== null ? unserialize($stateData) : [];
+            $stateData = is_string($stateData) && $stateData !== '' ? unserialize($stateData) : [];
+            $this->stateData = is_array($stateData) ? $stateData : [];
         } else {
             $this->state = new UncheckedState();
             $this->stateData = [];
