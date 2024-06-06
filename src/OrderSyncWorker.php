@@ -71,10 +71,6 @@ class OrderSyncWorker
             is_int($batchSize) ? $batchSize + 1 : null,
             $firstOrderId
         );
-
-        //reset array keys to 0,1,...,n-1
-        $pluginOrders = array_values($pluginOrders);
-
         $syncableOrders = array_slice($pluginOrders, 0, $batchSize);
         $axytosOrders = $this->axytosOrderFactory->createMany($syncableOrders);
 
