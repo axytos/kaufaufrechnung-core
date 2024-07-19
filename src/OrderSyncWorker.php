@@ -2,6 +2,7 @@
 
 namespace Axytos\KaufAufRechnung\Core;
 
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
@@ -30,14 +31,21 @@ class OrderSyncWorker
      */
     private $axytosOrderFactory;
 
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     */
+    private $errorReportingClient;
+
     public function __construct(
         OrderSyncRepositoryInterface $orderSyncRepository,
         AxytosOrderFactory $axytosOrderFactory,
-        LoggerAdapterInterface $logger
+        LoggerAdapterInterface $logger,
+        ErrorReportingClientInterface $errorReportingClient
     ) {
         $this->orderSyncRepository = $orderSyncRepository;
         $this->axytosOrderFactory = $axytosOrderFactory;
         $this->logger = $logger;
+        $this->errorReportingClient = $errorReportingClient;
     }
 
     /**
@@ -75,13 +83,20 @@ class OrderSyncWorker
         //reset array keys to 0,1,...,n-1
         $pluginOrders = array_values($pluginOrders);
 
+        /** @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface[] */
         $syncableOrders = array_slice($pluginOrders, 0, $batchSize);
-        $axytosOrders = $this->axytosOrderFactory->createMany($syncableOrders);
 
-        $this->logger->info('OrderSyncWorker: ' . count($axytosOrders) . ' to sync.');
+        $this->logger->info('OrderSyncWorker: ' . count($syncableOrders) . ' to sync.');
 
-        foreach ($axytosOrders as $axytosOrder) {
-            $axytosOrder->sync();
+        foreach ($syncableOrders as $syncableOrder) {
+            try {
+                $this->logger->info('OrderSyncWorker: syncing order ' . $syncableOrder->getOrderNumber());
+                $axytosOrder = $this->axytosOrderFactory->create($syncableOrder);
+                $axytosOrder->sync();
+            } catch (\Throwable $th) {
+                $this->logger->error('OrderSyncWorker: error syncing order ' . $syncableOrder->getOrderNumber() . ': ' . $th->getMessage());
+                $this->errorReportingClient->reportError($th);
+            }
         }
 
         if (is_int($batchSize) && count($pluginOrders) > $batchSize) {

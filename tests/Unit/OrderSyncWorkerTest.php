@@ -2,6 +2,7 @@
 
 namespace Axytos\KaufAufRechnung\Core\Tests\Unit;
 
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
 use Axytos\KaufAufRechnung\Core\OrderSyncWorker;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
@@ -43,7 +44,8 @@ class OrderSyncWorkerTest extends TestCase
         $this->sut = new OrderSyncWorker(
             $this->orderSyncRepository,
             $this->axytosOrderFactory,
-            $this->createMock(LoggerAdapterInterface::class)
+            $this->createMock(LoggerAdapterInterface::class),
+            $this->createMock(ErrorReportingClientInterface::class)
         );
     }
 
@@ -71,15 +73,13 @@ class OrderSyncWorkerTest extends TestCase
             ->with(OrderSyncWorker::SYNCABLE_STATES)
             ->willReturn($ordersToSync);
 
-        $this->axytosOrderFactory->method('createMany')->willReturnCallback(function ($array) use (&$executionCounts) {
-            return array_map(function () use (&$executionCounts) {
-                /** @var AxytosOrder&MockObject */
-                $axytosOrder = $this->createMock(AxytosOrder::class);
-                $axytosOrder->method('sync')->willReturnCallback(function () use (&$executionCounts) {
-                    $executionCounts['sync']++;
-                });
-                return $axytosOrder;
-            }, $array);
+        $this->axytosOrderFactory->method('create')->willReturnCallback(function () use (&$executionCounts) {
+            /** @var AxytosOrder&MockObject */
+            $axytosOrder = $this->createMock(AxytosOrder::class);
+            $axytosOrder->method('sync')->willReturnCallback(function () use (&$executionCounts) {
+                $executionCounts['sync']++;
+            });
+            return $axytosOrder;
         });
 
 
@@ -103,7 +103,6 @@ class OrderSyncWorkerTest extends TestCase
         $pluginOrders[] = $finalOrder;
         /** @var AxytosOrder&MockObject */
         $axytosOrder = $this->createMock(AxytosOrder::class);
-        $axytosOrders = array_fill(0, $batchSize, $axytosOrder);
 
         $this->orderSyncRepository
             ->expects($this->once())
@@ -112,9 +111,8 @@ class OrderSyncWorkerTest extends TestCase
             ->willReturn($pluginOrders);
 
         $this->axytosOrderFactory
-            ->method('createMany')
-            ->with(array_slice($pluginOrders, 0, $batchSize))
-            ->willReturn($axytosOrders);
+            ->method('create')
+            ->willReturn($axytosOrder);
 
         $finalOrder
             ->method('getOrderNumber')
@@ -148,9 +146,8 @@ class OrderSyncWorkerTest extends TestCase
             ->willReturn($pluginOrders);
 
         $this->axytosOrderFactory
-            ->method('createMany')
-            ->with($pluginOrders)
-            ->willReturn($axytosOrders);
+            ->method('create')
+            ->willReturn($axytosOrder);
 
         $axytosOrder
             ->expects($this->exactly(10))
