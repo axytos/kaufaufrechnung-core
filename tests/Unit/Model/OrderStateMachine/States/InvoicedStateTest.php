@@ -10,15 +10,19 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class InvoicedStateTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\InvoicedState
+     * @var InvoicedState
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -30,7 +34,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_completelyRefundedReportsRefundedOrder()
+    public function test_sync_critical_changes_completely_refunded_reports_refunded_order()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -53,7 +57,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_completely_paid()
+    public function test_sync_critical_changes_completely_paid()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -76,7 +80,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_updatesStatusOfPaidOrderEvenIfRefunded()
+    public function test_sync_critical_changes_updates_status_of_paid_order_even_if_refunded()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -98,7 +102,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_doesNothingIfNeitherPaidNorRefunded()
+    public function test_sync_critical_changes_does_nothing_if_neither_paid_nor_refunded()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -118,7 +122,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncUncriticalChanges()
+    public function test_sync_uncritical_changes()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -140,7 +144,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncUncriticalChanges_onlySyncsRelevantChanges()
+    public function test_sync_uncritical_changes_only_syncs_relevant_changes()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -162,7 +166,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncPaymentStatus_updatesPaymentStatus()
+    public function test_sync_payment_status_updates_payment_status()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);
@@ -182,7 +186,7 @@ class InvoicedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncPaymentStatus_doesNothingIfPaymentStatusDidNotChange()
+    public function test_sync_payment_status_does_nothing_if_payment_status_did_not_change()
     {
         /** @var PluginOrderInterface&MockObject */
         $pluginOrder = $this->createMock(PluginOrderInterface::class);

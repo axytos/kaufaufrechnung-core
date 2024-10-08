@@ -8,10 +8,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutConfirmed
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutFailedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutRejectedState;
 
+/**
+ * @internal
+ */
 class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
 {
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     protected function initialState()
@@ -23,15 +27,17 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_checkout_runsPrecheckAndConfirmAndTransitionsToConfirmed()
+    public function test_checkout_runs_precheck_and_confirm_and_transitions_to_confirmed()
     {
         $this->commandFacade
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::COMPLETE_ORDER);
+            ->willReturn(ShopActions::COMPLETE_ORDER)
+        ;
         $this->commandFacade
             ->expects($this->once())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
 
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_ACCEPTED);
@@ -45,15 +51,17 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_checkout_runsPrecheckAndTransitionsToRejectedIfPrecheckRejects()
+    public function test_checkout_runs_precheck_and_transitions_to_rejected_if_precheck_rejects()
     {
         $this->commandFacade
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::CHANGE_PAYMENT_METHOD);
+            ->willReturn(ShopActions::CHANGE_PAYMENT_METHOD)
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
 
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_REJECTED);
@@ -66,15 +74,17 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_checkout_runsPrecheckAndTransitionsToFailedIfPrecheckFails()
+    public function test_checkout_runs_precheck_and_transitions_to_failed_if_precheck_fails()
     {
         $this->commandFacade
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willThrowException(new \Exception("simulated error"));
+            ->willThrowException(new \Exception('simulated error'))
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
 
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_FAILED);
@@ -87,16 +97,18 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_checkout_runsConfirmAndTransitionsToFailedIfConfirmFails()
+    public function test_checkout_runs_confirm_and_transitions_to_failed_if_confirm_fails()
     {
         $this->commandFacade
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::COMPLETE_ORDER);
+            ->willReturn(ShopActions::COMPLETE_ORDER)
+        ;
         $this->commandFacade
             ->expects($this->once())
             ->method('checkoutConfirm')
-            ->willThrowException(new \Exception("simulated error"));
+            ->willThrowException(new \Exception('simulated error'))
+        ;
 
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_ACCEPTED);

@@ -6,10 +6,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CanceledState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutConfirmedState;
 
+/**
+ * @internal
+ */
 class CanceledOrderIsUncanceledTest extends AxytosOrderTestCase
 {
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     protected function initialState()
@@ -30,15 +34,17 @@ class CanceledOrderIsUncanceledTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_sync_doesNothingIfOrderIsStillCanceled()
+    public function test_sync_does_nothing_if_order_is_still_canceled()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportUncancel');
+            ->method('reportUncancel')
+        ;
 
         $this->sut->sync();
 
@@ -48,15 +54,17 @@ class CanceledOrderIsUncanceledTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_sync_TransitionsToConfirmedIfOrderIsNotCanceled()
+    public function test_sync_transitions_to_confirmed_if_order_is_not_canceled()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportUncancel');
+            ->method('reportUncancel')
+        ;
 
         $this->sut->sync();
 

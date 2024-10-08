@@ -5,24 +5,23 @@ namespace Axytos\KaufAufRechnung\Core\Model\Commands;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\KaufAufRechnung\Core\EcommerceSdkAdapter\CheckoutOrderContext;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandInterface;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\CheckoutAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 
 class CheckoutConfirmCommand implements AxytosOrderCommandInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @var PluginOrderInterface
      */
     private $order;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 

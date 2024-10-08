@@ -4,9 +4,9 @@ namespace Axytos\KaufAufRechnung\Core\Tests\Unit;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
+use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Core\OrderSyncWorker;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
-use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use AxytosKaufAufRechnungShopware5\Adapter\PluginOrder;
@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class OrderSyncWorkerTest extends TestCase
 {
     /**
@@ -27,12 +30,13 @@ class OrderSyncWorkerTest extends TestCase
     private $axytosOrderFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\OrderSyncWorker
+     * @var OrderSyncWorker
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -64,24 +68,25 @@ class OrderSyncWorkerTest extends TestCase
         ];
 
         $executionCounts = [
-            'sync' => 0
+            'sync' => 0,
         ];
 
         $this->orderSyncRepository
             ->expects($this->once())
             ->method('getOrdersByStates')
             ->with(OrderSyncWorker::SYNCABLE_STATES)
-            ->willReturn($ordersToSync);
+            ->willReturn($ordersToSync)
+        ;
 
         $this->axytosOrderFactory->method('create')->willReturnCallback(function () use (&$executionCounts) {
             /** @var AxytosOrder&MockObject */
             $axytosOrder = $this->createMock(AxytosOrder::class);
             $axytosOrder->method('sync')->willReturnCallback(function () use (&$executionCounts) {
-                $executionCounts['sync']++;
+                ++$executionCounts['sync'];
             });
+
             return $axytosOrder;
         });
-
 
         $this->sut->sync();
 
@@ -91,7 +96,7 @@ class OrderSyncWorkerTest extends TestCase
     /**
      * @return void
      */
-    public function test_sync_passesParametersToRepository()
+    public function test_sync_passes_parameters_to_repository()
     {
         $batchSize = 42;
         $startToken = 'start-token';
@@ -108,19 +113,23 @@ class OrderSyncWorkerTest extends TestCase
             ->expects($this->once())
             ->method('getOrdersByStates')
             ->with(OrderSyncWorker::SYNCABLE_STATES, $batchSize + 1, $startToken)
-            ->willReturn($pluginOrders);
+            ->willReturn($pluginOrders)
+        ;
 
         $this->axytosOrderFactory
             ->method('create')
-            ->willReturn($axytosOrder);
+            ->willReturn($axytosOrder)
+        ;
 
         $finalOrder
             ->method('getOrderNumber')
-            ->willReturn($expectedNextToken);
+            ->willReturn($expectedNextToken)
+        ;
 
         $axytosOrder
             ->expects($this->exactly($batchSize))
-            ->method('sync');
+            ->method('sync')
+        ;
 
         $result = $this->sut->sync($batchSize, $startToken);
 
@@ -130,7 +139,7 @@ class OrderSyncWorkerTest extends TestCase
     /**
      * @return void
      */
-    public function test_sync_returnsNoNextTokenWhenDone()
+    public function test_sync_returns_no_next_token_when_done()
     {
         $expectedBatchSize = 42;
 
@@ -143,15 +152,18 @@ class OrderSyncWorkerTest extends TestCase
             ->expects($this->once())
             ->method('getOrdersByStates')
             ->with(OrderSyncWorker::SYNCABLE_STATES, $expectedBatchSize + 1)
-            ->willReturn($pluginOrders);
+            ->willReturn($pluginOrders)
+        ;
 
         $this->axytosOrderFactory
             ->method('create')
-            ->willReturn($axytosOrder);
+            ->willReturn($axytosOrder)
+        ;
 
         $axytosOrder
             ->expects($this->exactly(10))
-            ->method('sync');
+            ->method('sync')
+        ;
 
         $result = $this->sut->sync($expectedBatchSize);
 

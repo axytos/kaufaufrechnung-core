@@ -7,10 +7,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CanceledState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutConfirmedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyCanceledState;
 
+/**
+ * @internal
+ */
 class CanceledOrderStaysUncanceledFor30DaysTest extends AxytosOrderTestCase
 {
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     protected function initialState()
@@ -31,11 +35,12 @@ class CanceledOrderStaysUncanceledFor30DaysTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_sync_TransitionsToCompletelyCanceled()
+    public function test_sync_transitions_to_completely_canceled()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->commandFacade->expects($this->never())->method('reportUncancel');
 
@@ -47,11 +52,12 @@ class CanceledOrderStaysUncanceledFor30DaysTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_sync_TransitionsToConfirmedIfUncanceledAnyways()
+    public function test_sync_transitions_to_confirmed_if_uncanceled_anyways()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->commandFacade->expects($this->once())->method('reportUncancel');
 

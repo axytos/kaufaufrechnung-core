@@ -8,9 +8,9 @@ use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use PHPUnit\Framework\Attributes\Before;
@@ -61,6 +61,7 @@ abstract class AxytosOrderTestCase extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -88,6 +89,7 @@ abstract class AxytosOrderTestCase extends TestCase
 
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     abstract protected function initialState();
@@ -121,8 +123,11 @@ abstract class AxytosOrderTestCase extends TestCase
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @param int|null $expectedEmitCount
+     *
      * @return void
      */
     protected function expectEventEmitted($eventName, $expectedEmitCount = null)
@@ -130,8 +135,9 @@ abstract class AxytosOrderTestCase extends TestCase
         /** @var MockObject */
         $callbackMock = $this->createMock(AxytosOrderCommandInterface::class);
         $callbackMock
-            ->expects($expectedEmitCount !== null ? $this->exactly($expectedEmitCount) : $this->once())
-            ->method('execute');
+            ->expects(null !== $expectedEmitCount ? $this->exactly($expectedEmitCount) : $this->once())
+            ->method('execute')
+        ;
 
         /** @phpstan-ignore-next-line */
         $this->sut->subscribeEventListener($eventName, [$callbackMock, 'execute']);

@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\TrackingInformat
 class ReportTrackingInformationOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\TrackingInformationInterface
+     * @var TrackingInformationInterface
      */
     private $trackingInformation;
 

@@ -6,10 +6,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyRefundedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\InvoicedState;
 
+/**
+ * @internal
+ */
 class InvoicedOrderHasBeenRefundedTest extends AxytosOrderTestCase
 {
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     protected function initialState()
@@ -28,13 +32,16 @@ class InvoicedOrderHasBeenRefundedTest extends AxytosOrderTestCase
 
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportRefund');
+            ->method('reportRefund')
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportTrackingInformation');
+            ->method('reportTrackingInformation')
+        ;
 
         $this->sut->sync();
 
@@ -52,13 +59,16 @@ class InvoicedOrderHasBeenRefundedTest extends AxytosOrderTestCase
 
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportRefund');
+            ->method('reportRefund')
+        ;
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportTrackingInformation');
+            ->method('reportTrackingInformation')
+        ;
 
         $this->sut->sync();
 

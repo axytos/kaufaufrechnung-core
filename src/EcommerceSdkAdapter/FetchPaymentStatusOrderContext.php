@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\PaymentInformati
 class FetchPaymentStatusOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\PaymentInformationInterface
+     * @var PaymentInformationInterface
      */
     private $paymentInformation;
 

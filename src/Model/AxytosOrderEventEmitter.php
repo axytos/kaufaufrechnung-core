@@ -11,8 +11,11 @@ class AxytosOrderEventEmitter
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @param callable $eventListener
+     *
      * @return void
      */
     public function subscribe($eventName, $eventListener)
@@ -26,6 +29,7 @@ class AxytosOrderEventEmitter
 
     /**
      * @param string $eventName
+     *
      * @return void
      */
     public function emit($eventName)

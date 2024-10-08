@@ -8,12 +8,12 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine;
 class AxytosOrder implements AxytosOrderInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderEventEmitter
+     * @var AxytosOrderEventEmitter
      */
     private $eventEmitter;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $stateMachine;
 
@@ -27,8 +27,11 @@ class AxytosOrder implements AxytosOrderInterface
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @param callable $eventListener
+     *
      * @return void
      */
     public function subscribeEventListener($eventName, $eventListener)
@@ -38,13 +41,14 @@ class AxytosOrder implements AxytosOrderInterface
 
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*
      */
     public function getOrderCheckoutAction()
     {
         $checkoutAction = $this->stateMachine->getCheckoutAction();
-        if ($checkoutAction === null) {
-            throw new \Exception("No checkout action defined for current order state");
+        if (null === $checkoutAction) {
+            throw new \Exception('No checkout action defined for current order state');
         }
 
         return $checkoutAction;

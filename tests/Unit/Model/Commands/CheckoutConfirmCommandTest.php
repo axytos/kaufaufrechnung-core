@@ -11,6 +11,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CheckoutConfirmCommandTest extends TestCase
 {
     /**
@@ -30,6 +33,7 @@ class CheckoutConfirmCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -40,7 +44,8 @@ class CheckoutConfirmCommandTest extends TestCase
 
         $this->pluginOrder
             ->method('checkoutInformation')
-            ->willReturn($this->createMock(CheckoutInformationInterface::class));
+            ->willReturn($this->createMock(CheckoutInformationInterface::class))
+        ;
 
         $this->sut = new CheckoutConfirmCommand(
             $this->pluginOrder,
@@ -52,11 +57,12 @@ class CheckoutConfirmCommandTest extends TestCase
     /**
      * @return void
      */
-    public function test_execute_confirmsOrder()
+    public function test_execute_confirms_order()
     {
         $this->invoiceClient
             ->expects($this->once())
-            ->method('confirmOrder');
+            ->method('confirmOrder')
+        ;
 
         $this->sut->execute();
     }
