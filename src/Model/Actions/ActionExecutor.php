@@ -12,7 +12,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Configuration\ClientSecretPr
 class ActionExecutor implements ActionExecutorInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Configuration\ClientSecretProviderInterface
+     * @var ClientSecretProviderInterface
      */
     private $clientSecretProvider;
 
@@ -32,9 +32,10 @@ class ActionExecutor implements ActionExecutorInterface
     }
 
     /**
-     * @param string $clientSecret
-     * @param string $action
+     * @param string                   $clientSecret
+     * @param string                   $action
      * @param array<string,mixed>|null $parameters
+     *
      * @return \Axytos\KaufAufRechnung\Core\Abstractions\Model\Actions\ActionResultInterface
      */
     public function executeAction($clientSecret, $action, $parameters = null)
@@ -53,12 +54,13 @@ class ActionExecutor implements ActionExecutorInterface
 
     /**
      * @param string $clientSecret
+     *
      * @return bool
      */
     private function validateClientSecret($clientSecret)
     {
         $expectedClientSecret = $this->clientSecretProvider->getClientSecret();
-        if (is_null($expectedClientSecret) || $expectedClientSecret === '') {
+        if (is_null($expectedClientSecret) || '' === $expectedClientSecret) {
             return false;
         }
 
@@ -67,12 +69,13 @@ class ActionExecutor implements ActionExecutorInterface
 
     /**
      * @param string $action
+     *
      * @return ActionHandlerInterface|null
      */
     private function findHandler($action)
     {
         foreach ($this->handlers as $handler) {
-            if (strcasecmp($handler->action(), $action) === 0) {
+            if (0 === strcasecmp($handler->action(), $action)) {
                 return $handler;
             }
         }

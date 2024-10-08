@@ -3,12 +3,12 @@
 namespace Axytos\KaufAufRechnung\Core\Tests\Integration;
 
 use Axytos\ECommerce\AxytosECommerceClient;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiHostProvider;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiKeyProvider;
 use Axytos\ECommerce\Tests\Integration\Providers\FallbackModeConfiguration;
 use Axytos\ECommerce\Tests\Integration\Providers\PaymentMethodConfiguration;
 use Axytos\ECommerce\Tests\Integration\Providers\UserAgentInfoProvider;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
@@ -19,6 +19,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class IntegrationTestCase extends TestCase
 {
     use AxytosMockModelFactoryTrait;
@@ -90,6 +93,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -155,7 +159,9 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param string $expectedStateClassName
+     *
      * @phpstan-param class-string<\Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateInterface> $expectedStateClassName
+     *
      * @return void
      */
     public function thenAssertStateIs($expectedStateClassName)
@@ -165,6 +171,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $expectedValue
+     *
      * @return void
      */
     public function thenAssertShippingReportedSaved($expectedValue)
@@ -174,6 +181,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $expectedValue
+     *
      * @return void
      */
     public function thenAssertNewTrackingInformationSaved($expectedValue)
@@ -183,6 +191,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $expectedValue
+     *
      * @return void
      */
     public function thenAssertBasketUpdateReportedSaved($expectedValue)
@@ -192,6 +201,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $expectedValue
+     *
      * @return void
      */
     public function thenAssertBasketFrozen($expectedValue)
@@ -201,6 +211,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param mixed $data
+     *
      * @return void
      */
     public function savePreCheckResponseData($data)
@@ -218,6 +229,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param string $stateName
+     *
      * @return void
      */
     public function saveState($stateName)
@@ -243,6 +255,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasBeenCanceled($value)
@@ -260,6 +273,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasBeenInvoiced($value)
@@ -277,6 +291,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasBeenRefunded($value)
@@ -294,6 +309,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasBeenShipped($value)
@@ -311,6 +327,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasNewTrackingInformation($value)
@@ -328,6 +345,7 @@ class IntegrationTestCase extends TestCase
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function givenHasBasketUpdates($value)

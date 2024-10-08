@@ -5,13 +5,14 @@ namespace Axytos\KaufAufRechnung\Core\Model\OrderStateMachine;
 interface OrderStateInterface
 {
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateContextInterface $context
+     * @param OrderStateContextInterface $context
+     *
      * @return void
      */
     public function setContext($context);
 
     /**
-     * @return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateContextInterface
+     * @return OrderStateContextInterface
      */
     public function getContext();
 
@@ -37,6 +38,7 @@ interface OrderStateInterface
 
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction();

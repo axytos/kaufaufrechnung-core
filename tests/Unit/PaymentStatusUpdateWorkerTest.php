@@ -17,6 +17,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class PaymentStatusUpdateWorkerTest extends TestCase
 {
     /**
@@ -40,12 +43,13 @@ class PaymentStatusUpdateWorkerTest extends TestCase
     private $axytosOrderFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\PaymentStatusUpdateWorker
+     * @var PaymentStatusUpdateWorker
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -67,13 +71,15 @@ class PaymentStatusUpdateWorkerTest extends TestCase
 
     /**
      * @dataProvider updatePaymentStatus_test_cases
+     *
      * @param string $paymentStatus
-     * @param bool $orderExists
-     * @param int $expectedInvocations
+     * @param bool   $orderExists
+     * @param int    $expectedInvocations
+     *
      * @return void
      */
     #[DataProvider('updatePaymentStatus_test_cases')]
-    public function test_updatePaymentStatus_updatesOrderStatusForPaymentStatus($paymentStatus, $orderExists, $expectedInvocations)
+    public function test_update_payment_status_updates_order_status_for_payment_status($paymentStatus, $orderExists, $expectedInvocations)
     {
         $testPaymentId = 'payment-id';
         $testOrderId = 'order-id';
@@ -90,27 +96,32 @@ class PaymentStatusUpdateWorkerTest extends TestCase
         $this->axytosOrderFactory
             ->method('create')
             ->with($pluginOrder)
-            ->willReturn($axytosOrder);
+            ->willReturn($axytosOrder)
+        ;
 
         $this->invoiceClient
             ->method('getInvoiceOrderPaymentUpdate')
             ->with($testPaymentId)
-            ->willReturn($invoiceOrderPaymentUpdate);
+            ->willReturn($invoiceOrderPaymentUpdate)
+        ;
         if ($orderExists) {
             $this->orderSyncRepository
                 ->method('getOrderByOrderNumber')
                 ->with($testOrderId)
-                ->willReturn($pluginOrder);
+                ->willReturn($pluginOrder)
+            ;
         } else {
             $this->orderSyncRepository
                 ->method('getOrderByOrderNumber')
                 ->with($testOrderId)
-                ->willReturn(null);
+                ->willReturn(null)
+            ;
         }
 
         $axytosOrder
             ->expects($this->exactly($expectedInvocations))
-            ->method('syncPaymentStatus');
+            ->method('syncPaymentStatus')
+        ;
 
         $this->sut->updatePaymentStatus($testPaymentId);
     }
@@ -120,15 +131,17 @@ class PaymentStatusUpdateWorkerTest extends TestCase
      */
     public function ignore_test_updatePaymentStatus_reportsErrorOnExceptions()
     {
-        $testException = new \Exception("Test Exception");
+        $testException = new \Exception('Test Exception');
 
         $this->invoiceClient
             ->method('getInvoiceOrderPaymentUpdate')
-            ->willThrowException($testException);
+            ->willThrowException($testException)
+        ;
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($testException);
+            ->with($testException)
+        ;
 
         $this->sut->updatePaymentStatus('payment-id');
     }

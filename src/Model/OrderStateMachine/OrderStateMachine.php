@@ -5,9 +5,6 @@ namespace Axytos\KaufAufRechnung\Core\Model\OrderStateMachine;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderEventEmitter;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\Context\CheckoutStateContext;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\Context\SyncCriticalChangesStateContext;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\Context\SyncPaymentStatusStateContext;
@@ -21,11 +18,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyPaidSta
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyRefundedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\InvoicedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\UncheckedState;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 
 class OrderStateMachine
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateInterface
+     * @var OrderStateInterface
      */
     private $state;
 
@@ -35,32 +35,32 @@ class OrderStateMachine
     private $stateData;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @var PluginOrderInterface
      */
     private $pluginOrder;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface
+     * @var DatabaseTransactionFactoryInterface
      */
     private $databaseTransactionFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade
+     * @var AxytosOrderCommandFacade
      */
     private $commandFacade;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderEventEmitter
+     * @var AxytosOrderEventEmitter
      */
     private $eventEmitter;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
@@ -169,6 +169,7 @@ class OrderStateMachine
 
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction()
@@ -178,7 +179,9 @@ class OrderStateMachine
 
     /**
      * @param string $newState
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $newState
+     *
      * @return void
      */
     public function changeState($newState)
@@ -195,6 +198,7 @@ class OrderStateMachine
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function getStateValue($name)
@@ -204,7 +208,8 @@ class OrderStateMachine
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setStateValue($name, $value)
@@ -214,6 +219,7 @@ class OrderStateMachine
 
     /**
      * @param string $name
+     *
      * @return void
      */
     public function unsetStateValue($name)
@@ -222,7 +228,7 @@ class OrderStateMachine
     }
 
     /**
-     * @return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateInterface
+     * @return OrderStateInterface
      */
     public function getCurrentState()
     {
@@ -235,10 +241,10 @@ class OrderStateMachine
     private function restoreState()
     {
         $stateInfo = $this->pluginOrder->loadState();
-        if ($stateInfo !== null) {
+        if (null !== $stateInfo) {
             $this->state = $this->createState($stateInfo->getName());
             $stateData = $stateInfo->getData();
-            $stateData = is_string($stateData) && $stateData !== '' ? unserialize($stateData) : [];
+            $stateData = is_string($stateData) && '' !== $stateData ? unserialize($stateData) : [];
             $this->stateData = is_array($stateData) ? $stateData : [];
         } else {
             $this->state = new UncheckedState();
@@ -248,7 +254,8 @@ class OrderStateMachine
 
     /**
      * @param string $name
-     * @return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateInterface
+     *
+     * @return OrderStateInterface
      */
     private function createState($name)
     {

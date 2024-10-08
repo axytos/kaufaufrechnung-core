@@ -7,6 +7,9 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CheckoutConfirmed
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyRefundedState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\InvoicedState;
 
+/**
+ * @internal
+ */
 class AxytosOrderIntegrationTest extends IntegrationTestCase
 {
     /**
@@ -23,7 +26,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportCancel()
+    public function test_report_cancel()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -37,7 +40,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportUncancel()
+    public function test_report_uncancel()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -55,7 +58,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportCreateInvoice()
+    public function test_report_create_invoice()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -69,7 +72,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportCreateInvoice_with_updates()
+    public function test_report_create_invoice_with_updates()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -85,7 +88,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportRefund()
+    public function test_report_refund()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -103,7 +106,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportShipping()
+    public function test_report_shipping()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -118,7 +121,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportShipping_when_invoiced()
+    public function test_report_shipping_when_invoiced()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -137,7 +140,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportTrackingInformation()
+    public function test_report_tracking_information()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -152,7 +155,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportTrackingInformation_when_invoiced()
+    public function test_report_tracking_information_when_invoiced()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
@@ -171,7 +174,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function test_reportUpdate()
+    public function test_report_update()
     {
         $this->sut->checkout();
         $this->thenAssertStateIs(CheckoutConfirmedState::class);

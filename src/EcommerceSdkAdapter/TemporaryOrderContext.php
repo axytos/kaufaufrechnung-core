@@ -3,7 +3,6 @@
 namespace Axytos\KaufAufRechnung\Core\EcommerceSdkAdapter;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
-use DateTimeImmutable;
 
 class TemporaryOrderContext implements InvoiceOrderContextInterface
 {
@@ -14,6 +13,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return '';
     }
+
     /**
      * @return string
      */
@@ -21,13 +21,15 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return '';
     }
+
     /**
      * @return \DateTimeInterface
      */
     public function getOrderDateTime()
     {
-        return new DateTimeImmutable();
+        return new \DateTimeImmutable();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
      */
@@ -35,6 +37,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\CustomerDataDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
      */
@@ -42,6 +45,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
      */
@@ -49,6 +53,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
      */
@@ -56,6 +61,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\BasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
      */
@@ -63,6 +69,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\RefundBasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
      */
@@ -70,6 +77,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
      */
@@ -77,6 +85,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection();
     }
+
     /**
      * @return mixed[]
      */
@@ -84,13 +93,16 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return [];
     }
+
     /**
      * @param mixed[] $data
+     *
      * @return void
      */
     public function setPreCheckResponseData($data)
     {
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
      */
@@ -98,6 +110,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection();
     }
+
     /**
      * @return float
      */
@@ -105,6 +118,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return 0.0;
     }
+
     /**
      * @return string[]
      */
@@ -112,6 +126,7 @@ class TemporaryOrderContext implements InvoiceOrderContextInterface
     {
         return [];
     }
+
     /**
      * @return string
      */

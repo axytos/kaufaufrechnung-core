@@ -15,7 +15,7 @@ class InvalidDataResult extends AbstractActionResult
     private $property;
 
     /**
-     * @param string $reason
+     * @param string      $reason
      * @param string|null $property
      */
     public function __construct($reason, $property = null)
@@ -42,6 +42,7 @@ class InvalidDataResult extends AbstractActionResult
             $result[] = new ActionResultMessage('Property', $this->property);
         }
         $result[] = new ActionResultMessage('Reason', $this->reason);
+
         return $result;
     }
 

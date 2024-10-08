@@ -6,10 +6,14 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\CompletelyPaidState;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States\InvoicedState;
 
+/**
+ * @internal
+ */
 class InvoicedOrderHasBeenPaidTest extends AxytosOrderTestCase
 {
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::*
      */
     protected function initialState()
@@ -28,13 +32,16 @@ class InvoicedOrderHasBeenPaidTest extends AxytosOrderTestCase
 
         $this->pluginOrder
             ->expects($this->once())
-            ->method('saveHasBeenPaid');
+            ->method('saveHasBeenPaid')
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
         $this->commandFacade
             ->expects($this->never())
-            ->method('reportTrackingInformation');
+            ->method('reportTrackingInformation')
+        ;
 
         $this->sut->sync();
 
@@ -52,13 +59,16 @@ class InvoicedOrderHasBeenPaidTest extends AxytosOrderTestCase
 
         $this->pluginOrder
             ->expects($this->never())
-            ->method('saveHasBeenPaid');
+            ->method('saveHasBeenPaid')
+        ;
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
         $this->commandFacade
             ->expects($this->once())
-            ->method('reportTrackingInformation');
+            ->method('reportTrackingInformation')
+        ;
 
         $this->sut->sync();
 
@@ -68,13 +78,14 @@ class InvoicedOrderHasBeenPaidTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_syncPaymentStatus_transitions_to_completely_paid_state()
+    public function test_sync_payment_status_transitions_to_completely_paid_state()
     {
         $this->commandFacade->method('hasBeenPaid')->willReturn(true);
 
         $this->pluginOrder
             ->expects($this->once())
-            ->method('saveHasBeenPaid');
+            ->method('saveHasBeenPaid')
+        ;
 
         $this->sut->syncPaymentStatus();
 
@@ -84,13 +95,14 @@ class InvoicedOrderHasBeenPaidTest extends AxytosOrderTestCase
     /**
      * @return void
      */
-    public function test_syncPaymentStatus_stays_in_invoiced_state()
+    public function test_sync_payment_status_stays_in_invoiced_state()
     {
         $this->commandFacade->method('hasBeenPaid')->willReturn(false);
 
         $this->pluginOrder
             ->expects($this->never())
-            ->method('saveHasBeenPaid');
+            ->method('saveHasBeenPaid')
+        ;
 
         $this->sut->syncPaymentStatus();
 

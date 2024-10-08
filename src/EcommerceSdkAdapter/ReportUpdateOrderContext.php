@@ -3,12 +3,11 @@
 namespace Axytos\KaufAufRechnung\Core\EcommerceSdkAdapter;
 
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdateInformationInterface;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 
 class ReportUpdateOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdateInformationInterface
+     * @var BasketUpdateInformationInterface
      */
     private $basketUpdateInformation;
 
@@ -41,6 +40,7 @@ class ReportUpdateOrderContext extends TemporaryOrderContext
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketPositionInterface $basketPosition
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
      */
     private function createBasketPositionDto($basketPosition)
@@ -55,6 +55,7 @@ class ReportUpdateOrderContext extends TemporaryOrderContext
         $dto->netPositionTotal = $basketPosition->getNetPositionTotal();
         $dto->grossPricePerUnit = $basketPosition->getGrossPricePerUnit();
         $dto->grossPositionTotal = $basketPosition->getGrossPositionTotal();
+
         return $dto;
     }
 }

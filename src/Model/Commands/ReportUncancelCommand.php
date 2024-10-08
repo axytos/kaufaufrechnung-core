@@ -13,22 +13,22 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 class ReportUncancelCommand implements AxytosOrderCommandInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @var PluginOrderInterface
      */
     private $order;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 

@@ -2,7 +2,6 @@
 
 namespace Axytos\KaufAufRechnung\Core\Tests\Integration;
 
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdateInformationInterface;
@@ -13,6 +12,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\PaymentInformati
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\RefundInformationInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\ShippingInformationInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\TrackingInformationInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 trait AxytosMockModelFactoryTrait
@@ -25,11 +25,11 @@ trait AxytosMockModelFactoryTrait
         /** @var DatabaseTransactionFactoryInterface&MockObject */
         $databaseTransactionFactory = $this->createMock(DatabaseTransactionFactoryInterface::class);
         $databaseTransactionFactory->method('create')->willReturn($this->createMock(DatabaseTransactionInterface::class));
+
         return $databaseTransactionFactory;
     }
 
     /**
-     *
      * @return PluginOrderInterface&MockObject
      */
     private function createPluginOrderMock()
@@ -116,11 +116,11 @@ trait AxytosMockModelFactoryTrait
         $customer->method('getDateOfBirth')->willReturn(\DateTimeImmutable::createFromFormat('Y-m-d', '1990-01-01'));
         $customer->method('getEmailAddress')->willReturn('max.mustermann@test.com');
         $customer->method('getCompanyName')->willReturn('MusterCompany');
+
         return $customer;
     }
 
     /**
-     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\InvoiceAddressInterface&MockObject
      */
     private function createCheckoutInvoiceAddressMock()
@@ -139,11 +139,11 @@ trait AxytosMockModelFactoryTrait
         $invoiceAddress->method('getStreet')->willReturn('Musterstraße 1a');
         $invoiceAddress->method('getAdditionalAddressLine3')->willReturn('Trakt C');
         $invoiceAddress->method('getAdditionalAddressLine4')->willReturn('Zimmer 111');
+
         return $invoiceAddress;
     }
 
     /**
-     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\DeliveryAddressInterface&MockObject
      */
     private function createCheckoutDeliveryAddressMock()
@@ -162,6 +162,7 @@ trait AxytosMockModelFactoryTrait
         $deliveryAddress->method('getStreet')->willReturn('Musterstraße 1a');
         $deliveryAddress->method('getAdditionalAddressLine3')->willReturn('Trakt C');
         $deliveryAddress->method('getAdditionalAddressLine4')->willReturn('Zimmer 111');
+
         return $deliveryAddress;
     }
 
@@ -193,7 +194,6 @@ trait AxytosMockModelFactoryTrait
     }
 
     /**
-     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\BasketInterface&MockObject
      */
     private function createReportInvoiceBasket()
@@ -225,7 +225,6 @@ trait AxytosMockModelFactoryTrait
     }
 
     /**
-     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\BasketInterface&MockObject
      */
     private function createReportRefundBasket()
@@ -252,7 +251,6 @@ trait AxytosMockModelFactoryTrait
     }
 
     /**
-     *
      * @return (\Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Shipping\BasketPositionInterface&MockObject)[]
      */
     private function createReportShippingBasket()
@@ -291,7 +289,6 @@ trait AxytosMockModelFactoryTrait
     }
 
     /**
-     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketInterface&MockObject
      */
     private function createReportBasketUpdatesBasket()
@@ -303,7 +300,7 @@ trait AxytosMockModelFactoryTrait
 
         $basket->method('getNetTotal')->willReturn(100.0);
         $basket->method('getGrossTotal')->willReturn(111.0);
-        $basket->method('getCurrency')->willReturn("EUR");
+        $basket->method('getCurrency')->willReturn('EUR');
         $basket->method('getPositions')->willReturn([$basketPosition]);
         $basketPosition->method('getProductNumber')->willReturn('prod1');
         $basketPosition->method('getProductName')->willReturn('Test Product');

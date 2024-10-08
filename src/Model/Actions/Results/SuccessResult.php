@@ -33,8 +33,9 @@ class SuccessResult extends AbstractActionResult
         /** @var \Axytos\KaufAufRechnung\Core\Abstractions\Model\Actions\ActionResultMessageInterface[] */
         $result = [];
         if (is_string($this->nextToken)) {
-            $result[] = new ActionResultMessage("nextToken", $this->nextToken);
+            $result[] = new ActionResultMessage('nextToken', $this->nextToken);
         }
+
         return $result;
     }
 }

@@ -10,6 +10,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CanceledStateTest extends TestCase
 {
     /**
@@ -29,6 +32,7 @@ class CanceledStateTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -39,7 +43,8 @@ class CanceledStateTest extends TestCase
 
         $this->context
             ->method('getPluginOrder')
-            ->willReturn($this->pluginOrder);
+            ->willReturn($this->pluginOrder)
+        ;
 
         $this->sut = new CanceledState();
         $this->sut->setContext($this->context);
@@ -48,19 +53,22 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_doesNothingIfStillCanceled()
+    public function test_sync_critical_changes_does_nothing_if_still_canceled()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $this->context
             ->method('getStateValue')
             ->with(CanceledState::CANCEL_DATE)
-            ->willReturn(time());
+            ->willReturn(time())
+        ;
 
         $this->context
             ->expects($this->never())
-            ->method('changeState');
+            ->method('changeState')
+        ;
 
         $this->sut->syncCriticalChanges();
     }
@@ -68,20 +76,23 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_transitionsToConfirmedWhenUncanceled()
+    public function test_sync_critical_changes_transitions_to_confirmed_when_uncanceled()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
         $this->context
             ->method('getStateValue')
             ->with(CanceledState::CANCEL_DATE)
-            ->willReturn(time());
+            ->willReturn(time())
+        ;
 
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CHECKOUT_CONFIRMED);
+            ->with(OrderStates::CHECKOUT_CONFIRMED)
+        ;
 
         $this->sut->syncCriticalChanges();
     }
@@ -89,20 +100,23 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_transitionsToCompletelyCanceledWhenCanceledForAtLeast30Days()
+    public function test_sync_critical_changes_transitions_to_completely_canceled_when_canceled_for_at_least30_days()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $this->context
             ->method('getStateValue')
             ->with(CanceledState::CANCEL_DATE)
-            ->willReturn(time() - 3024000); // 35 days
+            ->willReturn(time() - 3024000) // 35 days
+        ;
 
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::COMPLETELY_CANCELED);
+            ->with(OrderStates::COMPLETELY_CANCELED)
+        ;
 
         $this->sut->syncCriticalChanges();
     }
@@ -110,20 +124,23 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_syncCriticalChanges_transitionsToSelfWhenNoCancelDateWasGiven()
+    public function test_sync_critical_changes_transitions_to_self_when_no_cancel_date_was_given()
     {
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
         $this->context
             ->method('getStateValue')
             ->with(CanceledState::CANCEL_DATE)
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CANCELED);
+            ->with(OrderStates::CANCELED)
+        ;
 
         $this->sut->syncCriticalChanges();
     }
@@ -131,7 +148,7 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_onEnter_saveCurrentTimeAsCancelDate()
+    public function test_on_enter_save_current_time_as_cancel_date()
     {
         $matcher = null;
         /** @phpstan-ignore-next-line */
@@ -148,7 +165,8 @@ class CanceledStateTest extends TestCase
             ->with(
                 CanceledState::CANCEL_DATE,
                 $matcher
-            );
+            )
+        ;
 
         $this->sut->onEnter();
     }
@@ -156,12 +174,13 @@ class CanceledStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_onExit_deletesPreviouslySavedCancelDate()
+    public function test_on_exit_deletes_previously_saved_cancel_date()
     {
         $this->context
             ->expects($this->once())
             ->method('unsetStateValue')
-            ->with(CanceledState::CANCEL_DATE);
+            ->with(CanceledState::CANCEL_DATE)
+        ;
 
         $this->sut->onExit();
     }

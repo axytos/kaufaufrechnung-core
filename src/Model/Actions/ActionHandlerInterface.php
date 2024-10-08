@@ -11,6 +11,7 @@ interface ActionHandlerInterface
 
     /**
      * @param array<string,mixed>|null $parameters
+     *
      * @return \Axytos\KaufAufRechnung\Core\Abstractions\Model\Actions\ActionResultInterface
      */
     public function handle($parameters = null);

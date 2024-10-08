@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportShippingCommandTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class ReportShippingCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -48,7 +52,8 @@ class ReportShippingCommandTest extends TestCase
 
         $this->pluginOrder
             ->method('shippingInformation')
-            ->willReturn($this->createMock(ShippingInformationInterface::class));
+            ->willReturn($this->createMock(ShippingInformationInterface::class))
+        ;
 
         $this->sut = new ReportShippingCommand(
             $this->pluginOrder,
@@ -65,7 +70,8 @@ class ReportShippingCommandTest extends TestCase
     {
         $this->invoiceClient
             ->expects($this->once())
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
 
         $this->sut->execute();
     }
@@ -77,12 +83,14 @@ class ReportShippingCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('reportShipping')
-            ->willThrowException(new ApiException("", 400));
+            ->willThrowException(new ApiException('', 400))
+        ;
 
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($this->isInstanceOf(ApiException::class));
+            ->with($this->isInstanceOf(ApiException::class))
+        ;
 
         $this->sut->execute();
     }
@@ -94,7 +102,8 @@ class ReportShippingCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('reportShipping')
-            ->willThrowException(new ApiException("", 500));
+            ->willThrowException(new ApiException('', 500))
+        ;
 
         $this->expectException(ApiException::class);
 

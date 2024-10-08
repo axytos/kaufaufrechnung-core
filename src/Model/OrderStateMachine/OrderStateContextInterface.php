@@ -2,8 +2,6 @@
 
 namespace Axytos\KaufAufRechnung\Core\Model\OrderStateMachine;
 
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
-
 interface OrderStateContextInterface
 {
     /**
@@ -13,32 +11,38 @@ interface OrderStateContextInterface
 
     /**
      * @param string $newState
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $newState
+     *
      * @return void
      */
     public function changeState($newState);
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function getStateValue($name);
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setStateValue($name, $value);
 
     /**
      * @param string $name
+     *
      * @return void
      */
     public function unsetStateValue($name);
 
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\ECommerce\Clients\Invoice\ShopActions::*
      */
     public function checkoutPrecheck();
@@ -90,7 +94,9 @@ interface OrderStateContextInterface
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @return void
      */
     public function emit($eventName);

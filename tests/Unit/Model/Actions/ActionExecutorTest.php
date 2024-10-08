@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ActionExecutorTest extends TestCase
 {
     /**
@@ -32,6 +35,7 @@ class ActionExecutorTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -46,11 +50,12 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsInvalidSecretResultIfSecretsAreNotEqual()
+    public function test_execute_action_returns_invalid_secret_result_if_secrets_are_not_equal()
     {
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn('expected-secret');
+            ->willReturn('expected-secret')
+        ;
 
         $result = $this->sut->executeAction('invalid-secret', 'action');
 
@@ -60,11 +65,12 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsInvalidSecretResultIfSecretIsNotConfigured()
+    public function test_execute_action_returns_invalid_secret_result_if_secret_is_not_configured()
     {
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         /** @phpstan-ignore-next-line */
         $result = $this->sut->executeAction(null, 'action');
@@ -75,11 +81,12 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsInvalidSecretResultIfSecretIsEmpty()
+    public function test_execute_action_returns_invalid_secret_result_if_secret_is_empty()
     {
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn('');
+            ->willReturn('')
+        ;
 
         $result = $this->sut->executeAction('', 'action');
 
@@ -89,12 +96,13 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsUnknownActionIfActionHasNoHandler()
+    public function test_execute_action_returns_unknown_action_if_action_has_no_handler()
     {
         $expectedSecret = 'expected-secret';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         /** @var UnknownActionResult */
         $result = $this->sut->executeAction($expectedSecret, 'unknown-action');
@@ -107,18 +115,20 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_invokesOrderSyncHandlerForOrderSyncAction()
+    public function test_execute_action_invokes_order_sync_handler_for_order_sync_action()
     {
         $expectedSecret = 'expected-secret';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->once())
             ->method('sync')
             ->with(null, null)
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'order-sync');
 
@@ -129,18 +139,20 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_invokesOrderSyncHandlerCaseInsensitive()
+    public function test_execute_action_invokes_order_sync_handler_case_insensitive()
     {
         $expectedSecret = 'expected-secret';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->once())
             ->method('sync')
             ->with(null, null)
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'oRdEr-SyNc');
 
@@ -151,20 +163,22 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_invokesOrderSyncHandlerWithParameters()
+    public function test_execute_action_invokes_order_sync_handler_with_parameters()
     {
         $expectedSecret = 'expected-secret';
         $expectedBatchSize = 42;
         $expectedStartToken = 'expected-start-token';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->once())
             ->method('sync')
             ->with($expectedBatchSize, $expectedStartToken)
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'order-sync', [
             'batchSize' => $expectedBatchSize,
@@ -178,19 +192,21 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsInvalidDataIfBatchSizeParameterHasInvalidType()
+    public function test_execute_action_returns_invalid_data_if_batch_size_parameter_has_invalid_type()
     {
         $expectedSecret = 'expected-secret';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->never())
-            ->method('sync');
+            ->method('sync')
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'order-sync', [
-            'batchSize' => 'invalid'
+            'batchSize' => 'invalid',
         ]);
 
         $this->assertInstanceOf(InvalidDataResult::class, $result);
@@ -199,19 +215,21 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsInvalidDataIfStartTokenParameterHasInvalidType()
+    public function test_execute_action_returns_invalid_data_if_start_token_parameter_has_invalid_type()
     {
         $expectedSecret = 'expected-secret';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->never())
-            ->method('sync');
+            ->method('sync')
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'order-sync', [
-            'startToken' => 123
+            'startToken' => 123,
         ]);
 
         $this->assertInstanceOf(InvalidDataResult::class, $result);
@@ -220,18 +238,20 @@ class ActionExecutorTest extends TestCase
     /**
      * @return void
      */
-    public function test_executeAction_returnsNextTokenInResultIfReturnedBySync()
+    public function test_execute_action_returns_next_token_in_result_if_returned_by_sync()
     {
         $expectedSecret = 'expected-secret';
         $expectedNextToken = 'next-token';
         $this->clientSecretProvider
             ->method('getClientSecret')
-            ->willReturn($expectedSecret);
+            ->willReturn($expectedSecret)
+        ;
 
         $this->orderSyncWorker
             ->expects($this->once())
             ->method('sync')
-            ->willReturn($expectedNextToken);
+            ->willReturn($expectedNextToken)
+        ;
 
         $result = $this->sut->executeAction($expectedSecret, 'order-sync');
 

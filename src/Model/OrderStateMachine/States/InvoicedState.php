@@ -16,7 +16,7 @@ class InvoicedState extends AbstractState
         if ($this->context->hasBeenPaid()) {
             $pluginOrder->saveHasBeenPaid();
             $this->context->changeState(OrderStates::COMPLETELY_PAID);
-        } else if ($pluginOrder->hasBeenRefunded()) {
+        } elseif ($pluginOrder->hasBeenRefunded()) {
             $this->context->reportRefund();
             $this->context->changeState(OrderStates::COMPLETELY_REFUNDED);
         }

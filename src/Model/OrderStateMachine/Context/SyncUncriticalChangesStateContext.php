@@ -12,17 +12,17 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 class SyncUncriticalChangesStateContext extends AbstractStateContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade
+     * @var AxytosOrderCommandFacade
      */
     private $commandFacade;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface
+     * @var DatabaseTransactionFactoryInterface
      */
     private $databaseTransactionFactory;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
@@ -66,6 +66,7 @@ class SyncUncriticalChangesStateContext extends AbstractStateContext
 
     /**
      * @param callable $callable
+     *
      * @return void
      */
     private function executeInTransaction($callable)
@@ -81,8 +82,9 @@ class SyncUncriticalChangesStateContext extends AbstractStateContext
     }
 
     /**
-     * @param callable $callable
+     * @param callable                                                                               $callable
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface $transaction
+     *
      * @return void
      */
     private function executeInTransactionInternal($callable, $transaction)

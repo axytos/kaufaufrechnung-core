@@ -12,22 +12,23 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 class CheckoutPrecheckCommand implements AxytosOrderCommandInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @var PluginOrderInterface
      */
     private $order;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
      * @var string
+     *
      * @phpstan-var \Axytos\ECommerce\Clients\Invoice\ShopActions::*
      */
     private $shopAction = ShopActions::CHANGE_PAYMENT_METHOD;
@@ -59,6 +60,7 @@ class CheckoutPrecheckCommand implements AxytosOrderCommandInterface
 
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\ECommerce\Clients\Invoice\ShopActions::*
      */
     public function getShopAction()

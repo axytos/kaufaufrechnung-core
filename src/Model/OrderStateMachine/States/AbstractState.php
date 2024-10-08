@@ -13,6 +13,7 @@ abstract class AbstractState implements OrderStateInterface
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateContextInterface $context
+     *
      * @return void
      */
     public function setContext($context)
@@ -55,6 +56,7 @@ abstract class AbstractState implements OrderStateInterface
 
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction()
