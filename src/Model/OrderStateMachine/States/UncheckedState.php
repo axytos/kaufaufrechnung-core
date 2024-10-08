@@ -21,9 +21,10 @@ class UncheckedState extends AbstractState
             $pluginOrder->freezeBasket();
 
             $shopAction = $this->context->checkoutPrecheck();
-            if ($shopAction === ShopActions::CHANGE_PAYMENT_METHOD) {
+            if (ShopActions::CHANGE_PAYMENT_METHOD === $shopAction) {
                 $this->context->changeState(OrderStates::CHECKOUT_REJECTED);
                 $this->context->emit(AxytosOrderEvents::CHECKOUT_AFTER_REJECTED);
+
                 return;
             }
 
@@ -46,6 +47,7 @@ class UncheckedState extends AbstractState
 
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction()

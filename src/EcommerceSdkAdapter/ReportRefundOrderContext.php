@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\RefundInformatio
 class ReportRefundOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\RefundInformationInterface
+     * @var RefundInformationInterface
      */
     private $refundInformation;
 
@@ -51,6 +51,7 @@ class ReportRefundOrderContext extends TemporaryOrderContext
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\BasketPositionInterface $basketPosition
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto
      */
     private function createBasketPositionDto($basketPosition)
@@ -59,11 +60,13 @@ class ReportRefundOrderContext extends TemporaryOrderContext
         $dto->productId = $basketPosition->getProductNumber();
         $dto->netRefundTotal = $basketPosition->getNetRefundTotal();
         $dto->grossRefundTotal = $basketPosition->getGrossRefundTotal();
+
         return $dto;
     }
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\TaxGroupInterface $taxGroup
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDto
      */
     private function createTaxGroupDto($taxGroup)
@@ -72,6 +75,7 @@ class ReportRefundOrderContext extends TemporaryOrderContext
         $dto->taxPercent = $taxGroup->getTaxPercent();
         $dto->valueToTax = $taxGroup->getValueToTax();
         $dto->total = $taxGroup->getTotal();
+
         return $dto;
     }
 }

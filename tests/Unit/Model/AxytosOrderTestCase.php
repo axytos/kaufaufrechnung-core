@@ -8,14 +8,17 @@ use Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class AxytosOrderTestCase extends TestCase
 {
     /**
@@ -55,6 +58,7 @@ class AxytosOrderTestCase extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -124,17 +128,21 @@ class AxytosOrderTestCase extends TestCase
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @return void
      */
     protected function assertAxytosOrderEventEmitted($eventName)
     {
-        $this->assertTrue(in_array($eventName, $this->emittedEvents, true), "Failed asserting $eventName was emitted.");
+        $this->assertTrue(in_array($eventName, $this->emittedEvents, true), "Failed asserting {$eventName} was emitted.");
     }
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @return void
      */
     protected function givenAxytosOrderEventListenerError($eventName)

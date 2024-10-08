@@ -11,6 +11,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CheckoutConfirmedStateTest extends TestCase
 {
     /**
@@ -30,6 +33,7 @@ class CheckoutConfirmedStateTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -40,7 +44,8 @@ class CheckoutConfirmedStateTest extends TestCase
 
         $this->context
             ->method('getPluginOrder')
-            ->willReturn($this->pluginOrder);
+            ->willReturn($this->pluginOrder)
+        ;
 
         $this->sut = new CheckoutConfirmedState();
         $this->sut->setContext($this->context);
@@ -48,30 +53,36 @@ class CheckoutConfirmedStateTest extends TestCase
 
     /**
      * @dataProvider syncCriticalChanges_testData
-     * @param bool $invoiced
-     * @param bool $cancelled
+     *
+     * @param bool        $invoiced
+     * @param bool        $cancelled
      * @param string|null $transitionTo
+     *
      * @return void
      */
     #[DataProvider('syncCriticalChanges_testData')]
-    public function test_syncCriticalChanges_transitionsToCorrectState($invoiced, $cancelled, $transitionTo)
+    public function test_sync_critical_changes_transitions_to_correct_state($invoiced, $cancelled, $transitionTo)
     {
         $this->pluginOrder
             ->method('hasBeenInvoiced')
-            ->willReturn($invoiced);
+            ->willReturn($invoiced)
+        ;
         $this->pluginOrder
             ->method('hasBeenCanceled')
-            ->willReturn($cancelled);
+            ->willReturn($cancelled)
+        ;
 
         if (!is_null($transitionTo)) {
             $this->context
                 ->expects($this->once())
                 ->method('changeState')
-                ->with($transitionTo);
+                ->with($transitionTo)
+            ;
         } else {
             $this->context
                 ->expects($this->never())
-                ->method('changeState');
+                ->method('changeState')
+            ;
         }
 
         $this->sut->syncCriticalChanges();
@@ -92,24 +103,29 @@ class CheckoutConfirmedStateTest extends TestCase
 
     /**
      * @dataProvider syncUncriticalChanges_reportsUpdate_testData
+     *
      * @param bool $hasBasketUpdates
-     * @param int $reportInvocationCount
-     * @param int $saveInvocationCount
+     * @param int  $reportInvocationCount
+     * @param int  $saveInvocationCount
+     *
      * @return void
      */
     #[DataProvider('syncUncriticalChanges_reportsUpdate_testData')]
-    public function test_syncUncriticalChanges_reportsUpdate($hasBasketUpdates, $reportInvocationCount, $saveInvocationCount)
+    public function test_sync_uncritical_changes_reports_update($hasBasketUpdates, $reportInvocationCount, $saveInvocationCount)
     {
         $this->pluginOrder
             ->method('hasBasketUpdates')
-            ->willReturn($hasBasketUpdates);
+            ->willReturn($hasBasketUpdates)
+        ;
 
         $this->context
             ->expects($this->exactly($reportInvocationCount))
-            ->method('reportUpdate');
+            ->method('reportUpdate')
+        ;
         $this->pluginOrder
             ->expects($this->exactly($saveInvocationCount))
-            ->method('saveBasketUpdatesReported');
+            ->method('saveBasketUpdatesReported')
+        ;
 
         $this->sut->syncUncriticalChanges();
     }
@@ -127,28 +143,34 @@ class CheckoutConfirmedStateTest extends TestCase
 
     /**
      * @dataProvider syncUncriticalChanges_reportsShipping_testData
+     *
      * @param bool $hasBeenShipped
      * @param bool $hasShippingReported
-     * @param int $reportInvocationCount
-     * @param int $saveInvocationCount
+     * @param int  $reportInvocationCount
+     * @param int  $saveInvocationCount
+     *
      * @return void
      */
     #[DataProvider('syncUncriticalChanges_reportsShipping_testData')]
-    public function test_syncUncriticalChanges_reportsShipping($hasBeenShipped, $hasShippingReported, $reportInvocationCount, $saveInvocationCount)
+    public function test_sync_uncritical_changes_reports_shipping($hasBeenShipped, $hasShippingReported, $reportInvocationCount, $saveInvocationCount)
     {
         $this->pluginOrder
             ->method('hasBeenShipped')
-            ->willReturn($hasBeenShipped);
+            ->willReturn($hasBeenShipped)
+        ;
         $this->pluginOrder
             ->method('hasShippingReported')
-            ->willReturn($hasShippingReported);
+            ->willReturn($hasShippingReported)
+        ;
 
         $this->context
             ->expects($this->exactly($reportInvocationCount))
-            ->method('reportShipping');
+            ->method('reportShipping')
+        ;
         $this->pluginOrder
             ->expects($this->exactly($saveInvocationCount))
-            ->method('saveHasShippingReported');
+            ->method('saveHasShippingReported')
+        ;
 
         $this->sut->syncUncriticalChanges();
     }
@@ -168,24 +190,29 @@ class CheckoutConfirmedStateTest extends TestCase
 
     /**
      * @dataProvider syncUncriticalChanges_reportsTracking_testData
+     *
      * @param bool $hasNewTrackingInformation
-     * @param int $reportInvocationCount
-     * @param int $saveInvocationCount
+     * @param int  $reportInvocationCount
+     * @param int  $saveInvocationCount
+     *
      * @return void
      */
     #[DataProvider('syncUncriticalChanges_reportsTracking_testData')]
-    public function test_syncUncriticalChanges_reportsTracking($hasNewTrackingInformation, $reportInvocationCount, $saveInvocationCount)
+    public function test_sync_uncritical_changes_reports_tracking($hasNewTrackingInformation, $reportInvocationCount, $saveInvocationCount)
     {
         $this->pluginOrder
             ->method('hasNewTrackingInformation')
-            ->willReturn($hasNewTrackingInformation);
+            ->willReturn($hasNewTrackingInformation)
+        ;
 
         $this->context
             ->expects($this->exactly($reportInvocationCount))
-            ->method('reportTrackingInformation');
+            ->method('reportTrackingInformation')
+        ;
         $this->pluginOrder
             ->expects($this->exactly($saveInvocationCount))
-            ->method('saveNewTrackingInformation');
+            ->method('saveNewTrackingInformation')
+        ;
 
         $this->sut->syncUncriticalChanges();
     }

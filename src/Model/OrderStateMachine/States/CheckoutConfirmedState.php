@@ -4,7 +4,6 @@ namespace Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\States;
 
 use Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
-use Doctrine\ORM\Query\Expr\Func;
 
 class CheckoutConfirmedState extends AbstractState
 {
@@ -17,11 +16,13 @@ class CheckoutConfirmedState extends AbstractState
 
         if ($pluginOrder->hasBeenCanceled()) {
             $this->transitionToCanceled();
+
             return;
         }
 
         if ($pluginOrder->hasBeenInvoiced()) {
             $this->transitionToInvoiced();
+
             return;
         }
     }
@@ -38,6 +39,7 @@ class CheckoutConfirmedState extends AbstractState
 
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction()

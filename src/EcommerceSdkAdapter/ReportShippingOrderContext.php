@@ -9,7 +9,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\ShippingInformat
 class ReportShippingOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\ShippingInformationInterface
+     * @var ShippingInformationInterface
      */
     private $shippingInformation;
 
@@ -31,11 +31,13 @@ class ReportShippingOrderContext extends TemporaryOrderContext
             [$this, 'createShippingBasketPositionDto'],
             $this->shippingInformation->getShippingBasketPositions()
         );
+
         return new ShippingBasketPositionDtoCollection(...$positions);
     }
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Shipping\BasketPositionInterface $position
+     *
      * @return ShippingBasketPositionDto
      */
     private function createShippingBasketPositionDto($position)
@@ -43,6 +45,7 @@ class ReportShippingOrderContext extends TemporaryOrderContext
         $dto = new ShippingBasketPositionDto();
         $dto->productId = $position->getProductNumber();
         $dto->quantity = $position->getQuantity();
+
         return $dto;
     }
 }

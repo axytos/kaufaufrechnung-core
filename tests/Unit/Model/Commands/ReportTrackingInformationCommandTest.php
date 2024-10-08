@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportTrackingInformationCommandTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class ReportTrackingInformationCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -50,12 +54,13 @@ class ReportTrackingInformationCommandTest extends TestCase
 
         $trackingInformation->method('getTrackingIds')->willReturn([
             'TrackingId1',
-            'TrackingId2'
+            'TrackingId2',
         ]);
         $trackingInformation->method('getDeliveryMethod')->willReturn('DeliveryMethod');
         $this->pluginOrder
             ->method('trackingInformation')
-            ->willReturn($trackingInformation);
+            ->willReturn($trackingInformation)
+        ;
 
         $this->sut = new ReportTrackingInformationCommand(
             $this->pluginOrder,
@@ -72,7 +77,8 @@ class ReportTrackingInformationCommandTest extends TestCase
     {
         $this->invoiceClient
             ->expects($this->once())
-            ->method('trackingInformation');
+            ->method('trackingInformation')
+        ;
 
         $this->sut->execute();
     }
@@ -84,12 +90,14 @@ class ReportTrackingInformationCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('trackingInformation')
-            ->willThrowException(new ApiException("", 400));
+            ->willThrowException(new ApiException('', 400))
+        ;
 
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($this->isInstanceOf(ApiException::class));
+            ->with($this->isInstanceOf(ApiException::class))
+        ;
 
         $this->sut->execute();
     }
@@ -101,7 +109,8 @@ class ReportTrackingInformationCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('trackingInformation')
-            ->willThrowException(new ApiException("", 500));
+            ->willThrowException(new ApiException('', 500))
+        ;
 
         $this->expectException(ApiException::class);
 

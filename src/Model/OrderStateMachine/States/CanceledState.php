@@ -18,11 +18,13 @@ class CanceledState extends AbstractState
 
         if (!$pluginOrder->hasBeenCanceled()) {
             $this->transitionToConfirmed();
+
             return;
         }
 
         if ($this->daysSinceCanceled() >= self::CANCEL_RETENTION_DAYS) {
             $this->transitionToCompletelyCanceled();
+
             return;
         }
     }
@@ -52,12 +54,14 @@ class CanceledState extends AbstractState
         if (!is_int($cancelDate)) {
             // transition to self to reset cancel date
             $this->context->changeState(OrderStates::CANCELED);
+
             return 0;
         }
 
         $now = time();
         $secondsPassed = $now - $cancelDate;
         $secondsPerDay = 86400;
+
         return $secondsPassed / $secondsPerDay;
     }
 

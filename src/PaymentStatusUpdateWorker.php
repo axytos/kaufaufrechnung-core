@@ -11,27 +11,27 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface
 class PaymentStatusUpdateWorker
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface
+     * @var OrderSyncRepositoryInterface
      */
     private $orderSyncRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory
+     * @var AxytosOrderFactory
      */
     private $axytosOrderFactory;
 
@@ -52,6 +52,7 @@ class PaymentStatusUpdateWorker
 
     /**
      * @param string $paymentId
+     *
      * @return void
      */
     public function updatePaymentStatus($paymentId)
@@ -74,17 +75,20 @@ class PaymentStatusUpdateWorker
 
     /**
      * @param string $paymentId
-     * @return \Axytos\KaufAufRechnung\Core\Model\AxytosOrder
+     *
+     * @return Model\AxytosOrder
      */
     private function fetchAxytosOrderForPayment($paymentId)
     {
         $pluginOrder = $this->fetchPluginOrderForPayment($paymentId);
+
         return $this->axytosOrderFactory->create($pluginOrder);
     }
 
     /**
      * @param string $paymentId
-     * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     *
+     * @return Plugin\Abstractions\PluginOrderInterface
      */
     private function fetchPluginOrderForPayment($paymentId)
     {
@@ -100,11 +104,13 @@ class PaymentStatusUpdateWorker
 
     /**
      * @param string $paymentId
+     *
      * @return string
      */
     private function fetchOrderNumberForPayment($paymentId)
     {
         $invoiceOrderPaymentUpdate = $this->invoiceClient->getInvoiceOrderPaymentUpdate($paymentId);
+
         return $invoiceOrderPaymentUpdate->orderId;
     }
 }

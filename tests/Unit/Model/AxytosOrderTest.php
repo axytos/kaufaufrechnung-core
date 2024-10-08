@@ -3,12 +3,12 @@
 namespace Axytos\KaufAufRechnung\Core\Tests\Unit\Model;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
-use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
 use Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade;
+use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use PHPUnit\Framework\Attributes\Before;
@@ -16,6 +16,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class AxytosOrderTest extends TestCase
 {
     /**
@@ -35,6 +38,7 @@ class AxytosOrderTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -54,19 +58,22 @@ class AxytosOrderTest extends TestCase
 
     /**
      * @dataProvider getOrderCheckoutAction_test_cases
+     *
      * @param string $orderState
      * @param string $expected
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $orderState
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::* $expected
+     *
      * @return void
      */
     #[DataProvider('getOrderCheckoutAction_test_cases')]
-    public function test_getOrderCheckoutAction($orderState, $expected)
+    public function test_get_order_checkout_action($orderState, $expected)
     {
-
         $this->pluginOrder
             ->method('loadState')
-            ->willReturn(new AxytosOrderStateInfo($orderState));
+            ->willReturn(new AxytosOrderStateInfo($orderState))
+        ;
 
         $sut = $this->orderFactory->create($this->pluginOrder);
         $actual = $sut->getOrderCheckoutAction();
@@ -80,25 +87,29 @@ class AxytosOrderTest extends TestCase
     public static function getOrderCheckoutAction_test_cases()
     {
         return [
-            ['' /*unchecked*/, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD],
+            ['' /* unchecked */, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD],
             [OrderStates::CHECKOUT_REJECTED, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD],
             [OrderStates::CHECKOUT_CONFIRMED, AxytosOrderCheckoutAction::COMPLETE_CHECKOUT],
-            [OrderStates::CHECKOUT_FAILED, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD]
+            [OrderStates::CHECKOUT_FAILED, AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD],
         ];
     }
 
     /**
      * @dataProvider getOrderCheckoutAction_error_cases
+     *
      * @param string $orderState
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $orderState
+     *
      * @return void
      */
     #[DataProvider('getOrderCheckoutAction_error_cases')]
-    public function test_getOrderCheckoutAction_throwsForUnsupportedStates($orderState)
+    public function test_get_order_checkout_action_throws_for_unsupported_states($orderState)
     {
         $this->pluginOrder
             ->method('loadState')
-            ->willReturn(new AxytosOrderStateInfo($orderState));
+            ->willReturn(new AxytosOrderStateInfo($orderState))
+        ;
 
         $this->expectException(\Exception::class);
 

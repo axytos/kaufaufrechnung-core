@@ -8,6 +8,7 @@ class CheckoutRejectedState extends AbstractState
 {
     /**
      * @return string|null
+     *
      * @phpstan-return \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderCheckoutAction::*|null
      */
     public function getCheckoutAction()

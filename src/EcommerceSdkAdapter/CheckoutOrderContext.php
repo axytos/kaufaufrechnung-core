@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CheckoutInformat
 class CheckoutOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CheckoutInformationInterface
+     * @var CheckoutInformationInterface
      */
     private $checkoutInformation;
 
@@ -74,6 +74,7 @@ class CheckoutOrderContext extends TemporaryOrderContext
         $dto->addressLine2 = $invoiceAddress->getAdditionalAddressLine2();
         $dto->addressLine3 = $invoiceAddress->getAdditionalAddressLine3();
         $dto->addressLine4 = $invoiceAddress->getAdditionalAddressLine4();
+
         return $dto;
     }
 
@@ -122,6 +123,7 @@ class CheckoutOrderContext extends TemporaryOrderContext
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\BasketPositionInterface $basketPosition
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
      */
     private function createBasketPositionDto($basketPosition)
@@ -135,6 +137,7 @@ class CheckoutOrderContext extends TemporaryOrderContext
         $dto->netPositionTotal = $basketPosition->getNetPositionTotal();
         $dto->grossPricePerUnit = $basketPosition->getGrossPricePerUnit();
         $dto->grossPositionTotal = $basketPosition->getGrossPositionTotal();
+
         return $dto;
     }
 }

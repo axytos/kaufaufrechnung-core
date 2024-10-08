@@ -17,7 +17,7 @@ class ActionResultMessage implements ActionResultMessageInterface
     private $details;
 
     /**
-     * @param string $message
+     * @param string      $message
      * @param string|null $details
      */
     public function __construct($message, $details = null)

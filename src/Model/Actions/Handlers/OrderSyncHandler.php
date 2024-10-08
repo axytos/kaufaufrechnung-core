@@ -10,7 +10,7 @@ use Axytos\KaufAufRechnung\Core\OrderSyncWorker;
 class OrderSyncHandler implements ActionHandlerInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\OrderSyncWorker
+     * @var OrderSyncWorker
      */
     private $orderSyncWorker;
 
@@ -29,6 +29,7 @@ class OrderSyncHandler implements ActionHandlerInterface
 
     /**
      * @param array<string,mixed>|null $parameters
+     *
      * @return \Axytos\KaufAufRechnung\Core\Abstractions\Model\Actions\ActionResultInterface
      */
     public function handle($parameters = null)
@@ -44,12 +45,14 @@ class OrderSyncHandler implements ActionHandlerInterface
         }
 
         $nextToken = $this->orderSyncWorker->sync($batchSize, $startToken);
+
         return new SuccessResult($nextToken);
     }
 
     /**
      * @param array<string,mixed>|null $parameters
-     * @param string $key
+     * @param string                   $key
+     *
      * @return mixed
      */
     private function getParam($parameters, $key)

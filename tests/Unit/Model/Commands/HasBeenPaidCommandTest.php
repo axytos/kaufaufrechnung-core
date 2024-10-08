@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class HasBeenPaidCommandTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class HasBeenPaidCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -48,7 +52,8 @@ class HasBeenPaidCommandTest extends TestCase
 
         $this->pluginOrder
             ->method('paymentInformation')
-            ->willReturn($this->createMock(PaymentInformationInterface::class));
+            ->willReturn($this->createMock(PaymentInformationInterface::class))
+        ;
 
         $this->sut = new HasBeenPaidCommand(
             $this->pluginOrder,
@@ -61,7 +66,7 @@ class HasBeenPaidCommandTest extends TestCase
     /**
      * @return void
      */
-    public function test_hasBeenPaid_returns_true()
+    public function test_has_been_paid_returns_true()
     {
         $this->invoiceClient->method('hasBeenPaid')->willReturn(true);
 
@@ -73,7 +78,7 @@ class HasBeenPaidCommandTest extends TestCase
     /**
      * @return void
      */
-    public function test_hasBeenPaid_returns_false()
+    public function test_has_been_paid_returns_false()
     {
         $this->invoiceClient->method('hasBeenPaid')->willReturn(false);
 
@@ -85,11 +90,12 @@ class HasBeenPaidCommandTest extends TestCase
     /**
      * @return void
      */
-    public function test_hasBeenPaid_returns_false_on_client_error()
+    public function test_has_been_paid_returns_false_on_client_error()
     {
         $this->invoiceClient
             ->method('hasBeenPaid')
-            ->willThrowException(new ApiException("", 400));
+            ->willThrowException(new ApiException('', 400))
+        ;
 
         $this->sut->execute();
 
@@ -103,7 +109,8 @@ class HasBeenPaidCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('hasBeenPaid')
-            ->willThrowException(new ApiException("", 500));
+            ->willThrowException(new ApiException('', 500))
+        ;
 
         $this->expectException(ApiException::class);
 

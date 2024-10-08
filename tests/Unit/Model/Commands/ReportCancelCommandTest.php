@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportCancelCommandTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class ReportCancelCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -48,7 +52,8 @@ class ReportCancelCommandTest extends TestCase
 
         $this->pluginOrder
             ->method('cancelInformation')
-            ->willReturn($this->createMock(CancelInformationInterface::class));
+            ->willReturn($this->createMock(CancelInformationInterface::class))
+        ;
 
         $this->sut = new ReportCancelCommand(
             $this->pluginOrder,
@@ -65,7 +70,8 @@ class ReportCancelCommandTest extends TestCase
     {
         $this->invoiceClient
             ->expects($this->once())
-            ->method('cancelOrder');
+            ->method('cancelOrder')
+        ;
 
         $this->sut->execute();
     }
@@ -77,12 +83,14 @@ class ReportCancelCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('cancelOrder')
-            ->willThrowException(new ApiException("", 400));
+            ->willThrowException(new ApiException('', 400))
+        ;
 
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($this->isInstanceOf(ApiException::class));
+            ->with($this->isInstanceOf(ApiException::class))
+        ;
 
         $this->sut->execute();
     }
@@ -94,7 +102,8 @@ class ReportCancelCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('cancelOrder')
-            ->willThrowException(new ApiException("", 500));
+            ->willThrowException(new ApiException('', 500))
+        ;
 
         $this->expectException(ApiException::class);
 

@@ -4,28 +4,28 @@ namespace Axytos\KaufAufRechnung\Core\Model;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine;
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 
 class AxytosOrderFactory
 {
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface
+     * @var DatabaseTransactionFactoryInterface
      */
     private $databaseTransactionFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade
+     * @var AxytosOrderCommandFacade
      */
     private $commandFacade;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
@@ -43,7 +43,8 @@ class AxytosOrderFactory
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
-     * @return \Axytos\KaufAufRechnung\Core\Model\AxytosOrder
+     *
+     * @return AxytosOrder
      */
     public function create($pluginOrder)
     {
@@ -56,6 +57,7 @@ class AxytosOrderFactory
             $eventEmitter,
             $this->logger
         );
+
         return new AxytosOrder(
             $eventEmitter,
             $stateMachine
@@ -64,6 +66,7 @@ class AxytosOrderFactory
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface[] $pluginOrders
+     *
      * @return \Axytos\KaufAufRechnung\Core\Model\AxytosOrder[]
      */
     public function createMany($pluginOrders)

@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class UncheckedStateTest extends TestCase
 {
     /**
@@ -27,6 +30,7 @@ class UncheckedStateTest extends TestCase
 
     /**
      * @var string[]
+     *
      * @phpstan-var array<\Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::*>
      */
     private $emittedEvents;
@@ -38,6 +42,7 @@ class UncheckedStateTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -48,15 +53,18 @@ class UncheckedStateTest extends TestCase
 
         $this->context
             ->method('getPluginOrder')
-            ->willReturn($this->pluginOrder);
+            ->willReturn($this->pluginOrder)
+        ;
 
         $this->emittedEvents = [];
         $this->context
             ->method('emit')
             ->willReturnCallback(function ($eventName) {
                 $this->emittedEvents[] = $eventName;
+
                 return null;
-            });
+            })
+        ;
 
         $this->sut = new UncheckedState();
         $this->sut->setContext($this->context);
@@ -65,19 +73,22 @@ class UncheckedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_checkout_invokesPrecheckThenConfirm()
+    public function test_checkout_invokes_precheck_then_confirm()
     {
         $this->context
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::COMPLETE_ORDER);
+            ->willReturn(ShopActions::COMPLETE_ORDER)
+        ;
         $this->context
             ->expects($this->once())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CHECKOUT_CONFIRMED);
+            ->with(OrderStates::CHECKOUT_CONFIRMED)
+        ;
 
         $this->sut->checkout();
 
@@ -91,19 +102,22 @@ class UncheckedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_checkout_rejectsOrderIfPrecheckIsUnsuccessful()
+    public function test_checkout_rejects_order_if_precheck_is_unsuccessful()
     {
         $this->context
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::CHANGE_PAYMENT_METHOD);
+            ->willReturn(ShopActions::CHANGE_PAYMENT_METHOD)
+        ;
         $this->context
             ->expects($this->never())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CHECKOUT_REJECTED);
+            ->with(OrderStates::CHECKOUT_REJECTED)
+        ;
 
         $this->sut->checkout();
 
@@ -116,19 +130,22 @@ class UncheckedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_checkout_failsOrderIfPrecheckThrows()
+    public function test_checkout_fails_order_if_precheck_throws()
     {
         $this->context
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willThrowException(new \Exception("simulator error"));
+            ->willThrowException(new \Exception('simulator error'))
+        ;
         $this->context
             ->expects($this->never())
-            ->method('checkoutConfirm');
+            ->method('checkoutConfirm')
+        ;
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CHECKOUT_FAILED);
+            ->with(OrderStates::CHECKOUT_FAILED)
+        ;
 
         $this->expectException(\Exception::class);
 
@@ -145,20 +162,23 @@ class UncheckedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_checkout_failsOrderIfConfirmThrows()
+    public function test_checkout_fails_order_if_confirm_throws()
     {
         $this->context
             ->expects($this->once())
             ->method('checkoutPrecheck')
-            ->willReturn(ShopActions::COMPLETE_ORDER);
+            ->willReturn(ShopActions::COMPLETE_ORDER)
+        ;
         $this->context
             ->expects($this->once())
             ->method('checkoutConfirm')
-            ->willThrowException(new \Exception("simulated error"));
+            ->willThrowException(new \Exception('simulated error'))
+        ;
         $this->context
             ->expects($this->once())
             ->method('changeState')
-            ->with(OrderStates::CHECKOUT_FAILED);
+            ->with(OrderStates::CHECKOUT_FAILED)
+        ;
 
         $this->expectException(\Exception::class);
 
@@ -176,7 +196,7 @@ class UncheckedStateTest extends TestCase
     /**
      * @return void
      */
-    public function test_getCheckoutAction_alwaysReturnsChangePaymentMethod()
+    public function test_get_checkout_action_always_returns_change_payment_method()
     {
         $this->assertEquals(
             AxytosOrderCheckoutAction::CHANGE_PAYMENT_METHOD,

@@ -20,17 +20,17 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 class AxytosOrderCommandFacade
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
@@ -46,7 +46,9 @@ class AxytosOrderCommandFacade
 
     /**
      * @param PluginOrderInterface $pluginOrder
+     *
      * @return string
+     *
      * @phpstan-return \Axytos\ECommerce\Clients\Invoice\ShopActions::*
      */
     public function checkoutPrecheck($pluginOrder)
@@ -63,7 +65,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function checkoutConfirm($pluginOrder)
@@ -78,7 +81,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportCancel($pluginOrder)
@@ -94,7 +98,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportUncancel($pluginOrder)
@@ -110,7 +115,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportCreateInvoice($pluginOrder)
@@ -126,7 +132,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportRefund($pluginOrder)
@@ -142,7 +149,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportShipping($pluginOrder)
@@ -158,7 +166,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportTrackingInformation($pluginOrder)
@@ -174,7 +183,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return void
      */
     public function reportUpdate($pluginOrder)
@@ -190,7 +200,8 @@ class AxytosOrderCommandFacade
     }
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface $pluginOrder
+     * @param PluginOrderInterface $pluginOrder
+     *
      * @return bool
      */
     public function hasBeenPaid($pluginOrder)

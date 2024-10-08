@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\InvoiceInformati
 class ReportInvoiceOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\InvoiceInformationInterface
+     * @var InvoiceInformationInterface
      */
     private $invoiceInformation;
 
@@ -51,6 +51,7 @@ class ReportInvoiceOrderContext extends TemporaryOrderContext
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\BasketPositionInterface $basketPosition
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDto
      */
     private function createBasketPositionDto($basketPosition)
@@ -64,13 +65,13 @@ class ReportInvoiceOrderContext extends TemporaryOrderContext
         $dto->netPositionTotal = $basketPosition->getNetPositionTotal();
         $dto->grossPricePerUnit = $basketPosition->getGrossPricePerUnit();
         $dto->grossPositionTotal = $basketPosition->getGrossPositionTotal();
+
         return $dto;
     }
 
-
-
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\TaxGroupInterface $taxGroup
+     *
      * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto
      */
     private function createTaxGroupDto($taxGroup)
@@ -79,6 +80,7 @@ class ReportInvoiceOrderContext extends TemporaryOrderContext
         $dto->taxPercent = $taxGroup->getTaxPercent();
         $dto->valueToTax = $taxGroup->getValueToTax();
         $dto->total = $taxGroup->getTotal();
+
         return $dto;
     }
 }

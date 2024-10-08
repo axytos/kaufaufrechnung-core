@@ -7,7 +7,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CancelInformatio
 class ReportCancelOrderContext extends TemporaryOrderContext
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CancelInformationInterface
+     * @var CancelInformationInterface
      */
     private $cancelInformation;
 

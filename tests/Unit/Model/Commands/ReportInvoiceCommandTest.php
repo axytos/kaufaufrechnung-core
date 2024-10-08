@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportInvoiceCommandTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class ReportInvoiceCommandTest extends TestCase
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -48,7 +52,8 @@ class ReportInvoiceCommandTest extends TestCase
 
         $this->pluginOrder
             ->method('invoiceInformation')
-            ->willReturn($this->createMock(InvoiceInformationInterface::class));
+            ->willReturn($this->createMock(InvoiceInformationInterface::class))
+        ;
 
         $this->sut = new ReportInvoiceCommand(
             $this->pluginOrder,
@@ -65,7 +70,8 @@ class ReportInvoiceCommandTest extends TestCase
     {
         $this->invoiceClient
             ->expects($this->once())
-            ->method('createInvoice');
+            ->method('createInvoice')
+        ;
 
         $this->sut->execute();
     }
@@ -77,12 +83,14 @@ class ReportInvoiceCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('createInvoice')
-            ->willThrowException(new ApiException("", 400));
+            ->willThrowException(new ApiException('', 400))
+        ;
 
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($this->isInstanceOf(ApiException::class));
+            ->with($this->isInstanceOf(ApiException::class))
+        ;
 
         $this->sut->execute();
     }
@@ -94,7 +102,8 @@ class ReportInvoiceCommandTest extends TestCase
     {
         $this->invoiceClient
             ->method('createInvoice')
-            ->willThrowException(new ApiException("", 500));
+            ->willThrowException(new ApiException('', 500))
+        ;
 
         $this->expectException(ApiException::class);
 

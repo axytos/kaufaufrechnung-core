@@ -11,22 +11,22 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 abstract class AbstractStateContext implements OrderStateContextInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $stateMachine;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @var PluginOrderInterface
      */
     private $pluginOrder;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade
+     * @var AxytosOrderCommandFacade
      */
     private $commandFacade;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderEventEmitter
+     * @var AxytosOrderEventEmitter
      */
     private $eventEmitter;
 
@@ -42,9 +42,8 @@ abstract class AbstractStateContext implements OrderStateContextInterface
         $this->eventEmitter = $eventEmitter;
     }
 
-
     /**
-     * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface
+     * @return PluginOrderInterface
      */
     public function getPluginOrder()
     {
@@ -53,7 +52,9 @@ abstract class AbstractStateContext implements OrderStateContextInterface
 
     /**
      * @param string $newState
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates::* $newState
+     *
      * @return void
      */
     public function changeState($newState)
@@ -63,6 +64,7 @@ abstract class AbstractStateContext implements OrderStateContextInterface
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function getStateValue($name)
@@ -72,7 +74,8 @@ abstract class AbstractStateContext implements OrderStateContextInterface
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     *
      * @return void
      */
     public function setStateValue($name, $value)
@@ -82,6 +85,7 @@ abstract class AbstractStateContext implements OrderStateContextInterface
 
     /**
      * @param string $name
+     *
      * @return void
      */
     public function unsetStateValue($name)
@@ -89,9 +93,9 @@ abstract class AbstractStateContext implements OrderStateContextInterface
         $this->stateMachine->unsetStateValue($name);
     }
 
-
     /**
      * @return string
+     *
      * @phpstan-return \Axytos\ECommerce\Clients\Invoice\ShopActions::*
      */
     public function checkoutPrecheck()
@@ -173,7 +177,9 @@ abstract class AbstractStateContext implements OrderStateContextInterface
 
     /**
      * @param string $eventName
+     *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
+     *
      * @return void
      */
     public function emit($eventName)
