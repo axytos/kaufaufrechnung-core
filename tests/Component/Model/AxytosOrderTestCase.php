@@ -122,11 +122,10 @@ abstract class AxytosOrderTestCase extends TestCase
     }
 
     /**
-     * @param string $eventName
+     * @param string   $eventName
+     * @param int|null $expectedEmitCount
      *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
-     *
-     * @param int|null $expectedEmitCount
      *
      * @return void
      */

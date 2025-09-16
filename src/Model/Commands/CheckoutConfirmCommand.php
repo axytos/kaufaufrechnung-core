@@ -36,14 +36,16 @@ class CheckoutConfirmCommand implements AxytosOrderCommandInterface
     }
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function execute()
+    public function execute($skipPrecheck = true)
     {
         $this->logger->info('Order: ' . $this->order->getOrderNumber() . ' | CheckoutConfirm started');
 
         $checkoutOrderContext = new CheckoutOrderContext($this->order->checkoutInformation());
-        $this->invoiceClient->confirmOrder($checkoutOrderContext);
+        $this->invoiceClient->confirmOrder($checkoutOrderContext, $skipPrecheck);
 
         $this->logger->info('Order: ' . $this->order->getOrderNumber() . ' | CheckoutConfirm finished');
     }

@@ -83,9 +83,11 @@ class OrderStateMachine
     }
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkout()
+    public function checkout($skipPrecheck)
     {
         try {
             $context = new CheckoutStateContext(
@@ -95,7 +97,7 @@ class OrderStateMachine
                 $this->eventEmitter
             );
             $this->state->setContext($context);
-            $this->state->checkout();
+            $this->state->checkout($skipPrecheck);
         } catch (\Throwable $th) {
             $this->errorReportingClient->reportError($th);
             $this->logger->error($th->getMessage());

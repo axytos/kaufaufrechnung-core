@@ -26,11 +26,10 @@ class AxytosOrder implements AxytosOrderInterface
     }
 
     /**
-     * @param string $eventName
+     * @param string   $eventName
+     * @param callable $eventListener
      *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
-     *
-     * @param callable $eventListener
      *
      * @return void
      */
@@ -55,11 +54,13 @@ class AxytosOrder implements AxytosOrderInterface
     }
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkout()
+    public function checkout($skipPrecheck = true)
     {
-        $this->stateMachine->checkout();
+        $this->stateMachine->checkout($skipPrecheck);
     }
 
     /**
