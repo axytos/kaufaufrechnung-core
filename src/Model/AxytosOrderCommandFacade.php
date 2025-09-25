@@ -66,10 +66,11 @@ class AxytosOrderCommandFacade
 
     /**
      * @param PluginOrderInterface $pluginOrder
+     * @param bool                 $skipPrecheck
      *
      * @return void
      */
-    public function checkoutConfirm($pluginOrder)
+    public function checkoutConfirm($pluginOrder, $skipPrecheck = true)
     {
         $command = new CheckoutConfirmCommand(
             $pluginOrder,
@@ -77,7 +78,7 @@ class AxytosOrderCommandFacade
             $this->logger
         );
 
-        $command->execute();
+        $command->execute($skipPrecheck);
     }
 
     /**

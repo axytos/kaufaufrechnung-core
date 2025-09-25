@@ -43,7 +43,7 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_ACCEPTED);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_CONFIRMED);
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertInstanceOf(CheckoutConfirmedState::class, $this->sut->getCurrentState());
     }
@@ -66,7 +66,7 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_REJECTED);
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertInstanceOf(CheckoutRejectedState::class, $this->sut->getCurrentState());
     }
@@ -89,7 +89,7 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_FAILED);
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertInstanceOf(CheckoutFailedState::class, $this->sut->getCurrentState());
     }
@@ -114,7 +114,7 @@ class UncheckedOrderCheckoutTest extends AxytosOrderTestCase
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_ACCEPTED);
         $this->expectEventEmitted(AxytosOrderEvents::CHECKOUT_AFTER_FAILED);
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertInstanceOf(CheckoutFailedState::class, $this->sut->getCurrentState());
     }

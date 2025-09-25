@@ -10,11 +10,10 @@ class AxytosOrderEventEmitter
     private $eventListeners = [];
 
     /**
-     * @param string $eventName
+     * @param string   $eventName
+     * @param callable $eventListener
      *
      * @phpstan-param \Axytos\KaufAufRechnung\Core\Abstractions\Model\AxytosOrderEvents::* $eventName
-     *
-     * @param callable $eventListener
      *
      * @return void
      */

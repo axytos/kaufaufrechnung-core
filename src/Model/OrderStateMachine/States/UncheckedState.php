@@ -10,9 +10,11 @@ use Axytos\KaufAufRechnung\Core\Model\OrderStateMachine\OrderStates;
 class UncheckedState extends AbstractState
 {
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkout()
+    public function checkout($skipPrecheck = true)
     {
         try {
             $this->context->emit(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
@@ -20,17 +22,19 @@ class UncheckedState extends AbstractState
             $pluginOrder = $this->context->getPluginOrder();
             $pluginOrder->freezeBasket();
 
-            $shopAction = $this->context->checkoutPrecheck();
-            if (ShopActions::CHANGE_PAYMENT_METHOD === $shopAction) {
-                $this->context->changeState(OrderStates::CHECKOUT_REJECTED);
-                $this->context->emit(AxytosOrderEvents::CHECKOUT_AFTER_REJECTED);
+            if (!$skipPrecheck) {
+                $shopAction = $this->context->checkoutPrecheck();
+                if (ShopActions::CHANGE_PAYMENT_METHOD === $shopAction) {
+                    $this->context->changeState(OrderStates::CHECKOUT_REJECTED);
+                    $this->context->emit(AxytosOrderEvents::CHECKOUT_AFTER_REJECTED);
 
-                return;
+                    return;
+                }
             }
 
             $this->context->emit(AxytosOrderEvents::CHECKOUT_AFTER_ACCEPTED);
 
-            $this->context->checkoutConfirm();
+            $this->context->checkoutConfirm($skipPrecheck);
             $this->context->changeState(OrderStates::CHECKOUT_CONFIRMED);
 
             $this->context->emit(AxytosOrderEvents::CHECKOUT_AFTER_CONFIRMED);

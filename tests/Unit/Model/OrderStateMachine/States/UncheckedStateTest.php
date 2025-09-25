@@ -90,7 +90,7 @@ class UncheckedStateTest extends TestCase
             ->with(OrderStates::CHECKOUT_CONFIRMED)
         ;
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertEquals([
             AxytosOrderEvents::CHECKOUT_BEFORE_CHECK,
@@ -119,7 +119,7 @@ class UncheckedStateTest extends TestCase
             ->with(OrderStates::CHECKOUT_REJECTED)
         ;
 
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->assertEquals([
             AxytosOrderEvents::CHECKOUT_BEFORE_CHECK,
@@ -150,7 +150,7 @@ class UncheckedStateTest extends TestCase
         $this->expectException(\Exception::class);
 
         try {
-            $this->sut->checkout();
+            $this->sut->checkout(false);
         } finally {
             $this->assertEquals([
                 AxytosOrderEvents::CHECKOUT_BEFORE_CHECK,
@@ -183,7 +183,7 @@ class UncheckedStateTest extends TestCase
         $this->expectException(\Exception::class);
 
         try {
-            $this->sut->checkout();
+            $this->sut->checkout(false);
         } finally {
             $this->assertEquals([
                 AxytosOrderEvents::CHECKOUT_BEFORE_CHECK,
