@@ -17,7 +17,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_checkout()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
 
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
@@ -28,7 +28,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_cancel()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -42,7 +42,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_uncancel()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -60,7 +60,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_create_invoice()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -74,7 +74,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_create_invoice_with_updates()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -90,7 +90,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_refund()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -108,7 +108,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_shipping()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -123,7 +123,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_shipping_when_invoiced()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -142,7 +142,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_tracking_information()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -157,7 +157,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_tracking_information_when_invoiced()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 
@@ -176,7 +176,7 @@ class AxytosOrderIntegrationTest extends IntegrationTestCase
      */
     public function test_report_update()
     {
-        $this->sut->checkout();
+        $this->sut->checkout(false);
         $this->thenAssertStateIs(CheckoutConfirmedState::class);
         $this->thenAssertBasketFrozen(true);
 

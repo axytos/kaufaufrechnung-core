@@ -48,9 +48,11 @@ interface OrderStateContextInterface
     public function checkoutPrecheck();
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkoutConfirm();
+    public function checkoutConfirm($skipPrecheck);
 
     /**
      * @return void

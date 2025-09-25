@@ -17,9 +17,11 @@ interface OrderStateInterface
     public function getContext();
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkout();
+    public function checkout($skipPrecheck);
 
     /**
      * @return void

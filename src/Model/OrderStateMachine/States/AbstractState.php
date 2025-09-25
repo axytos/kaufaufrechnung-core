@@ -27,9 +27,11 @@ abstract class AbstractState implements OrderStateInterface
     }
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkout()
+    public function checkout($skipPrecheck)
     {
     }
 

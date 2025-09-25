@@ -127,6 +127,23 @@ class PaymentStatusUpdateWorkerTest extends TestCase
     }
 
     /**
+     * @return array<array<mixed>>
+     */
+    public static function updatePaymentStatus_test_cases()
+    {
+        return [
+            [PaymentStatus::UNPAID, false, 0],
+            [PaymentStatus::UNPAID, true, 1],
+            [PaymentStatus::PARTIALLY_PAID, false, 0],
+            [PaymentStatus::PARTIALLY_PAID, true, 1],
+            [PaymentStatus::PAID, false, 0],
+            [PaymentStatus::PAID, true, 1],
+            [PaymentStatus::OVERPAID, false, 0],
+            [PaymentStatus::OVERPAID, true, 1],
+        ];
+    }
+
+    /**
      * @return void
      */
     public function ignore_test_updatePaymentStatus_reportsErrorOnExceptions()
@@ -144,22 +161,5 @@ class PaymentStatusUpdateWorkerTest extends TestCase
         ;
 
         $this->sut->updatePaymentStatus('payment-id');
-    }
-
-    /**
-     * @return array<array<mixed>>
-     */
-    public static function updatePaymentStatus_test_cases()
-    {
-        return [
-            [PaymentStatus::UNPAID, false, 0],
-            [PaymentStatus::UNPAID, true, 1],
-            [PaymentStatus::PARTIALLY_PAID, false, 0],
-            [PaymentStatus::PARTIALLY_PAID, true, 1],
-            [PaymentStatus::PAID, false, 0],
-            [PaymentStatus::PAID, true, 1],
-            [PaymentStatus::OVERPAID, false, 0],
-            [PaymentStatus::OVERPAID, true, 1],
-        ];
     }
 }

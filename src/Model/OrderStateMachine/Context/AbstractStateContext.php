@@ -104,11 +104,13 @@ abstract class AbstractStateContext implements OrderStateContextInterface
     }
 
     /**
+     * @param bool $skipPrecheck
+     *
      * @return void
      */
-    public function checkoutConfirm()
+    public function checkoutConfirm($skipPrecheck)
     {
-        $this->commandFacade->checkoutConfirm($this->pluginOrder);
+        $this->commandFacade->checkoutConfirm($this->pluginOrder, $skipPrecheck);
     }
 
     /**
