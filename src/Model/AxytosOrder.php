@@ -58,7 +58,7 @@ class AxytosOrder implements AxytosOrderInterface
      *
      * @return void
      */
-    public function checkout($skipPrecheck = true)
+    public function checkout($skipPrecheck = false)
     {
         $this->stateMachine->checkout($skipPrecheck);
     }

@@ -14,7 +14,7 @@ class UncheckedState extends AbstractState
      *
      * @return void
      */
-    public function checkout($skipPrecheck = true)
+    public function checkout($skipPrecheck = false)
     {
         try {
             $this->context->emit(AxytosOrderEvents::CHECKOUT_BEFORE_CHECK);
